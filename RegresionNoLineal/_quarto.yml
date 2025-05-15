@@ -1,0 +1,31 @@
+project:
+  type: book
+
+book:
+  title: "Regresión No Lineal"
+  author: "Iván, Samuel, Rubí"
+  date: "20/5/2025"
+  chapters:
+    - index.qmd
+    - Caps/01-Introduccion.qmd
+    - Caps/02-Definiciones.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 3
+    code-fold: true
+    code-summary: "Código"
+    html-math-method: mathjax
+
+#  pdf:
+#    documentclass: scrreprt
+

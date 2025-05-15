@@ -1,0 +1,7 @@
+# Definiciones
+
+Aquí van.
+
+```{r, message=FALSE, warning=FALSE}
+print("Hola")
+```
