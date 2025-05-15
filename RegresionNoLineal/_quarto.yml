@@ -4,7 +4,7 @@ project:
 book:
   title: "Regresión No Lineal"
   author: "Iván, Samuel, Rubí"
-  date: "20/5/2025"
+  date: "2025-05-20"
   chapters:
     - index.qmd
     - Caps/01-Introduccion.qmd
@@ -25,6 +25,7 @@ format:
     code-fold: true
     code-summary: "Código"
     html-math-method: mathjax
+    lang: es
 
 #  pdf:
 #    documentclass: scrreprt
