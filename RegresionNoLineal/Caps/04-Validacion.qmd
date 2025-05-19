@@ -71,8 +71,6 @@ Cuando comparamos varios modelos anidados, procedemos como en el caso lineal y u
 Denotemos por $S$ a la suma de cuadrados, $\mathbf{v}$ los grados de libertad y $p$ el número de parámetros, con subíndices $T$ y $R$ para los modelos completo y no completo, y un subíndice $E$ para extra, los cálculos se pueden resumir como en el cuadro @tbl-comparacion-modelos. Para completar el análisis, comparamos el cociente $s_{E}^{2}/s_{T}^{2}$ con $F(\mathbf{v}_{E},\mathbf{v}_{T};\mathbf{\alpha})$ y aceptamos el modelo parcial si el cociente de cuadrados medios calculado es menor que el valor de la tabla. De lo contrario, retenemos los términos adicionales y usamos el modelo completo.
 
 
-O si prefieres usar la sintaxis de tablas de Quarto (sin LaTeX):
-
 | Fuente           | Suma de Cuadrados | Grados de Libertad | Cuadrado Medio | Razón F            |
 |------------------|-------------------|--------------------|----------------|--------------------|
 | Parámetros extra | $S_{E} = S_{R}-S_{T}$ | $\mathbf{v}_{E}=p_{T}-p_{R}$ | $s_{E}^{2}=S_{E}/\mathbf{v}_{E}$ | $s_{E}^{2}/s_{T}^{2}$ |
