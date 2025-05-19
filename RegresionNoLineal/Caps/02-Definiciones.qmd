@@ -75,7 +75,7 @@ $$
 en donde $y^\star = 1/y$ y $u = 1/x$. El modelo lineal ajustado resulta ser:
 
 ```{r}
-linearmodel <- lm(I(1/rate) ~ I(1/conc), data = data)
+linearmodel <- lm(I(1 / rate) ~ I(1 / conc), data = data)
 summary(linearmodel)
 ```
 
@@ -84,7 +84,7 @@ A continuación, veremos una gráfica del ajuste de dicho modelo.
 ```{r}
 plot(data$conc, data$rate, xlab = "Concentración (ppm)", ylab = "Velocidad", main = "Velocidad de reacción Puromicina", pch = 20, col = "red")
 xslin <- seq(0.001, 1.5, length.out = 1000)
-lines(xslin, 1/(linearmodel$coefficients[1] + linearmodel$coefficients[2] / (xslin)))
+lines(xslin, 1 / (linearmodel$coefficients[1] + linearmodel$coefficients[2] / (xslin)))
 grid()
 legend("bottomright", legend = c("Datos", "Regresión lineal"), col = c("red", "black"), pch = c(20, NA), lty = c(NA, 1))
 ```
@@ -92,7 +92,7 @@ legend("bottomright", legend = c("Datos", "Regresión lineal"), col = c("red", "
 Para analizar el ajuste del modelo, podemos considerar las siguientes gráficas.
 
 ```{r}
-par(mfrow=c(2,2),oma=c(0,0,0,0))
+par(mfrow = c(2, 2), oma = c(0, 0, 0, 0))
 plot(linearmodel)
 ```
 
@@ -106,7 +106,7 @@ Por lo tanto, este modelo no parece ser útil para explicar nuestros datos.
 
 Considerando que $\beta_0 = 1/\theta_1$ y $\beta_1 = \theta_2/\theta_1$, los valores de $\boldsymbol{\theta}$ ajustados son:
 ```{r}
-unname(c(1/linearmodel$coefficients[1], linearmodel$coefficients[2]/linearmodel$coefficients[1]))
+unname(c(1 / linearmodel$coefficients[1], linearmodel$coefficients[2] / linearmodel$coefficients[1]))
 ```
 
 :::
@@ -284,11 +284,11 @@ $$
 $$
 Como la primera observación de $x$ es $x_1 = 0.02$, tenemos:
 $$
-X_{11}^0 = \left. \frac{x_1}{\theta_2 + x_1} \right|_{\theta_2 = 0.08} = \left. \frac{0.02}{0.08 + 0.02} \right|_{\theta_2 = 0.08} = 0.2,
+X_{11}^0 = \left. \frac{x_1}{\theta_2 + x_1} \right|_{\theta_2 = 0.08} = \frac{0.02}{0.08 + 0.02} = 0.2,
 $$
 y también,
 $$
-X_{12}^0 = \left. \frac{-\theta_1 x_1}{\left(\theta_2 + x_1\right)^2} \right|_{\substack{\theta_1 = 205 \\ \theta_2 = 0.08}} = \left. \frac{(-205)(0.02)}{\left(0.08 + 0.02\right)^2} \right|_{\theta_2 = 0.08} = -410.
+X_{12}^0 = \left. \frac{-\theta_1 x_1}{\left(\theta_2 + x_1\right)^2} \right|_{\substack{\theta_1 = 205 \\ \theta_2 = 0.08}} = \frac{(-205)(0.02)}{\left(0.08 + 0.02\right)^2} = -410.
 $$
 Las derivadas $X_{ij}^0$ se recopilan en la matriz $\boldsymbol{X}_0$ y el vector de incrementos se calcula a partir de la @eq-Incrementos-Gauss-Newton como:
 $$
@@ -334,8 +334,8 @@ Veamos la gráfica del modelo ajustado en este caso comparada con la obtenida po
 ```{r}
 plot(data$conc, data$rate, xlab = "Concentración (ppm)", ylab = "Velocidad", main = "Velocidad de reacción Puromicina", pch = 20, col = "red")
 xslin <- seq(0.001, 1.5, length.out = 1000)
-lines(xslin, 1/(linearmodel$coefficients[1] + linearmodel$coefficients[2] / (xslin)))
-lines(xslin, coef(nlmodel)[1]*xslin/(xslin+coef(nlmodel)[2]), col = "blue")
+lines(xslin, 1 / (linearmodel$coefficients[1] + linearmodel$coefficients[2] / (xslin)))
+lines(xslin, coef(nlmodel)[1] * xslin / (xslin + coef(nlmodel)[2]), col = "blue")
 grid()
 legend("bottomright", legend = c("Datos", "Regresión lineal", "Regresión no lineal"), col = c("red", "black", "blue"), pch = c(20, NA, NA), lty = c(NA, 1, 1))
 ```
@@ -343,7 +343,7 @@ legend("bottomright", legend = c("Datos", "Regresión lineal", "Regresión no li
 Como podemos ver, los datos se explican de mejor manera por medio de la regresión no lineal. También podemos hacer un análisis gráfico del ajuste como a continuación.
 
 ```{r}
-par(mfrow=c(1,2),oma=c(0,0,0,0))
+par(mfrow = c(1, 2), oma = c(0, 0, 0, 0))
 
 # Gráfica de residuales
 
@@ -357,16 +357,18 @@ n <- length(residuals)
 empirical_probs <- ppoints(n)
 empirical_quantiles <- sort(residuals)
 
-theoretical_probs <- pnorm(empirical_quantiles, 
-                           mean = mean(residuals), 
-                           sd = sd(residuals))
+theoretical_probs <- pnorm(empirical_quantiles,
+  mean = mean(residuals),
+  sd = sd(residuals)
+)
 
 plot(theoretical_probs, empirical_probs,
-     main = "P-P Plot of Residuals",
-     xlab = "Theoretical Normal Probabilities",
-     ylab = "Empirical Probabilities",
-     xlim = c(0, 1), ylim = c(0, 1))
-abline(0, 1, col = "red")  # Reference line (y = x)
+  main = "P-P Plot of Residuals",
+  xlab = "Theoretical Normal Probabilities",
+  ylab = "Empirical Probabilities",
+  xlim = c(0, 1), ylim = c(0, 1)
+)
+abline(0, 1, col = "red") # Reference line (y = x)
 ```
 
 
@@ -579,7 +581,7 @@ marquardt <- function(theta0, lambda = 0.01, tol = 1e-6, max_iter = 100) {
   for (i in 1:max_iter) {
     g <- grad_rss(theta)
     H <- hess_rss(theta)
-    H_lm <- H + lambda * abs(H)  # Damping
+    H_lm <- H + lambda * abs(H) # Damping
     delta <- -g / H_lm
     theta_new <- theta + delta
     if (rss(theta_new) < rss(theta)) {
@@ -638,9 +640,11 @@ trazas <- list(
 
 # Gráfica
 colores <- c("red", "blue", "darkgreen", "purple", "orange", "black")
-plot(NA, xlim = c(0, 30), ylim = c(-2, 0),
-     xlab = "Iteración", ylab = expression(theta),
-     main = "Convergencia de los Métodos de Optimización")
+plot(NA,
+  xlim = c(0, 30), ylim = c(-2, 0),
+  xlab = "Iteración", ylab = expression(theta),
+  main = "Convergencia de los Métodos de Optimización"
+)
 
 legend("topright", legend = c(names(trazas), "Verdadero Parámetro"), col = colores, lty = c(rep(1, 5), 2), bty = "n")
 
