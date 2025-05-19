@@ -219,7 +219,7 @@ El estudio de la geometría del problema de mínimos cuadrados resulta útil par
 
 Supongamos que el modelo de regresión es lineal; es decir, los parámetros son $\boldsymbol{\theta} = \boldsymbol{\beta}$, y la función de suma de cuadrados de los residuos es $S(\boldsymbol{\beta})$. La @fig-contornos a) muestra el gráfico de contornos para este caso. Cuando el modelo es lineal en los parámetros desconocidos, los contornos son elipsoidales y presentan un único mínimo global en el estimador de mínimos cuadrados $\hat{\boldsymbol{\beta}}$.
 
-Cuando el modelo es no lineal, los contornos suelen adoptar la forma mostrada en la @fig-contornos b). Nótese que estos contornos no son elípticos, sino bastante alargados y de forma irregular. Es muy común observar una apariencia en forma de ``banana''. La forma y orientación específicas de los contornos de la suma de cuadrados de los residuos dependen tanto de la forma del modelo no lineal como de la muestra de datos obtenida. Con frecuencia, la superficie estará muy alargada cerca del óptimo, por lo que muchas soluciones para $\boldsymbol{\theta}$ producirán una suma de cuadrados de residuos cercana al mínimo global. Esto da lugar a un problema mal condicionado, donde suele ser difícil encontrar el mínimo global para $\boldsymbol{\theta}$. En algunos casos, los contornos pueden ser tan irregulares que aparecen varios mínimos locales e incluso más de un mínimo global. La @fig-contornos c) ilustra una situación con un mínimo global y posibles áreas donde podría detenerse el método numérico como posible mínimo.
+Cuando el modelo es no lineal, los contornos suelen adoptar la forma mostrada en la @fig-contornos b). Nótese que estos contornos no son elípticos, sino bastante alargados y de forma irregular. Es muy común observar una apariencia en forma de "banana". La forma y orientación específicas de los contornos de la suma de cuadrados de los residuos dependen tanto de la forma del modelo no lineal como de la muestra de datos obtenida. Con frecuencia, la superficie estará muy alargada cerca del óptimo, por lo que muchas soluciones para $\boldsymbol{\theta}$ producirán una suma de cuadrados de residuos cercana al mínimo global. Esto da lugar a un problema mal condicionado, donde suele ser difícil encontrar el mínimo global para $\boldsymbol{\theta}$. En algunos casos, los contornos pueden ser tan irregulares que aparecen varios mínimos locales e incluso más de un mínimo global. La @fig-contornos c) ilustra una situación con un mínimo global y posibles áreas donde podría detenerse el método numérico como posible mínimo.
 
 ![Geometría](proy1.png){#fig-contornos}
 
@@ -446,10 +446,9 @@ $$
 S(\boldsymbol{\theta}) \approx S(\boldsymbol{\theta}_0) + (\boldsymbol{\theta} - \boldsymbol{\theta}_0)^\top \nabla S(\boldsymbol{\theta}_0) + \frac{1}{2} (\boldsymbol{\theta} - \boldsymbol{\theta}_0)^\top H_S(\boldsymbol{\theta}_0) (\boldsymbol{\theta} - \boldsymbol{\theta}_0),
 $$
 donde:
-\begin{itemize}
-  \item $\nabla S(\boldsymbol{\theta}_0)$ es el gradiente de $S$ evaluado en $\boldsymbol{\theta}_0$, y
-  \item $H_S(\boldsymbol{\theta}_0)$ es el Hessiano de $S$ evaluado en $\boldsymbol{\theta}_0$.
-\end{itemize}
+
+* $\nabla S(\boldsymbol{\theta}_0)$ es el gradiente de $S$ evaluado en $\boldsymbol{\theta}_0$, y
+* $H_S(\boldsymbol{\theta}_0)$ es el Hessiano de $S$ evaluado en $\boldsymbol{\theta}_0$.
 
 El mínimo local de $S(\boldsymbol{\theta})$ (en caso de que $H_S(\boldsymbol{\theta}_0)$ sea definida positiva) ocurre cuando
 $$
@@ -477,10 +476,9 @@ $$
 H_S(\boldsymbol{\theta}) = 2 J_f(\boldsymbol{\theta})^\top J_f(\boldsymbol{\theta}) - 2 \sum_{i=1}^n r_i(\boldsymbol{\theta}) \, H_{f_i}(\boldsymbol{\theta}),
 $$
 donde:
-\begin{itemize}
-  \item $J_f(\boldsymbol{\theta})$ es el **jacobiano de $\boldsymbol{f}$ respecto a $\boldsymbol{\theta}$, y
-  \item $H_{f_i}(\boldsymbol{\theta})$ es el **hessiano** de la componente $f_i$ respecto a $\boldsymbol{\theta}$.
-\end{itemize}
+
+* $J_f(\boldsymbol{\theta})$ es el **jacobiano de $\boldsymbol{f}$ respecto a $\boldsymbol{\theta}$, y
+* $H_{f_i}(\boldsymbol{\theta})$ es el **hessiano** de la componente $f_i$ respecto a $\boldsymbol{\theta}$.
 
 En la práctica, frecuentemente se descarta el segundo término del Hessiano (que involucra las segundas derivadas de $\boldsymbol{f}$), obteniendo así el método de **Gauss-Newton** como una aproximación al método de Newton-Raphson. Esta omisión se justifica porque $J_f^\top J_f$ es simétrica y semidefinida positiva, lo que garantiza que la dirección de búsqueda sea de descenso, mientras que el término que involucra los Hessianos de $f_i$ puede introducir inestabilidades.
 
@@ -661,4 +659,4 @@ En los modelos de regresión no lineal, los parámetros a menudo tienen algún s
 
 Por ejemplo, en la función de Michaelis-Menten utilizada para los datos de puromicina (@exm-Michaelis-Menten), el parámetro $\theta_1$ es la velocidad asintótica de la reacción, es decir, el valor máximo de $f$ cuando $x \to \infty$. De manera similar, $\theta_2$ representa la concentración media, o el valor de $x$ tal que cuando la concentración alcanza ese valor, la velocidad es la mitad del valor máximo. Al obervar las gráficas de los datos, se podrían sugerir como valores iniciales razonables $\theta_1 = 205$ y $\theta_2 = 0.08$, que fueron los utilizados anteriormente.
 
-En algunos casos podemos transformar la función expectativa para obtener valores iniciales. Por ejemplo, el modelo de Michaelis-Menten puede ``linealizarse'' tomando el recíproco de la función expectativa. Se pueden usar mínimos cuadrados lineales en los datos recíprocos, lo que resulta en estimaciones de los parámetros lineales. Estas estimaciones pueden usarse luego para obtener los valores iniciales necesarios $\boldsymbol{\theta}_0$. La transformación gráfica también puede ser muy efectiva.
+En algunos casos podemos transformar la función expectativa para obtener valores iniciales. Por ejemplo, el modelo de Michaelis-Menten puede "linealizarse" tomando el recíproco de la función expectativa. Se pueden usar mínimos cuadrados lineales en los datos recíprocos, lo que resulta en estimaciones de los parámetros lineales. Estas estimaciones pueden usarse luego para obtener los valores iniciales necesarios $\boldsymbol{\theta}_0$. La transformación gráfica también puede ser muy efectiva.

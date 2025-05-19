@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Inferencia estadística en regresión no lineal – Regresión No Lineal</title>
+<title>4&nbsp; Validación del modelo – Regresión No Lineal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../Caps/04-Validacion.html" rel="next">
-<link href="../Caps/02-Definiciones.html" rel="prev">
+<link href="../references.html" rel="next">
+<link href="../Caps/03-Inferencia.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -110,7 +110,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Caps/03-Inferencia.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Caps/04-Validacion.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -155,13 +155,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Caps/03-Inferencia.html" class="sidebar-item-text sidebar-link active">
+  <a href="../Caps/03-Inferencia.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Caps/04-Validacion.html" class="sidebar-item-text sidebar-link">
+  <a href="../Caps/04-Validacion.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span></a>
   </div>
 </li>
@@ -181,8 +181,17 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#intervalos-y-regiones-de-confianza" id="toc-intervalos-y-regiones-de-confianza" class="nav-link active" data-scroll-target="#intervalos-y-regiones-de-confianza"><span class="header-section-number">3.1</span> Intervalos y Regiones de confianza</a></li>
-  <li><a href="#validez-de-la-inferencia-aproximada" id="toc-validez-de-la-inferencia-aproximada" class="nav-link" data-scroll-target="#validez-de-la-inferencia-aproximada"><span class="header-section-number">3.2</span> Validez de la inferencia aproximada</a></li>
+  <li><a href="#medidas-de-ajuste" id="toc-medidas-de-ajuste" class="nav-link active" data-scroll-target="#medidas-de-ajuste"><span class="header-section-number">4.1</span> Medidas de ajuste</a>
+  <ul class="collapse">
+  <li><a href="#análisis-de-residuos" id="toc-análisis-de-residuos" class="nav-link" data-scroll-target="#análisis-de-residuos"><span class="header-section-number">4.1.1</span> Análisis de residuos</a></li>
+  <li><a href="#pseudo-r2" id="toc-pseudo-r2" class="nav-link" data-scroll-target="#pseudo-r2"><span class="header-section-number">4.1.2</span> Pseudo-<span class="math inline">\(R^2\)</span></a></li>
+  </ul></li>
+  <li><a href="#comparación-de-modelos" id="toc-comparación-de-modelos" class="nav-link" data-scroll-target="#comparación-de-modelos"><span class="header-section-number">4.2</span> Comparación de modelos</a>
+  <ul class="collapse">
+  <li><a href="#modelos-anidados" id="toc-modelos-anidados" class="nav-link" data-scroll-target="#modelos-anidados"><span class="header-section-number">4.2.1</span> Modelos anidados</a></li>
+  <li><a href="#modelos-no-anidados" id="toc-modelos-no-anidados" class="nav-link" data-scroll-target="#modelos-no-anidados"><span class="header-section-number">4.2.2</span> Modelos no anidados</a></li>
+  </ul></li>
+  <li><a href="#medidas-de-no-linealidad" id="toc-medidas-de-no-linealidad" class="nav-link" data-scroll-target="#medidas-de-no-linealidad"><span class="header-section-number">4.3</span> Medidas de no linealidad</a></li>
   </ul>
 </nav>
     </div>
@@ -191,7 +200,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></h1>
 </div>
 
 
@@ -208,55 +217,119 @@ window.Quarto = {
 </header>
 
 
-<p>En un <strong>modelo de regresión lineal</strong>, cuando los errores están distribuidos de forma normal e independiente, existen pruebas estadísticas exactas e intervalos de confianza basados en las distribuciones <span class="math inline">\(t\)</span> y <span class="math inline">\(F\)</span>, y las estimaciones de los parámetros tienen propiedades estadísticas útiles y atractivas. Sin embargo, este no es el caso en la regresión no lineal, incluso cuando los errores están distribuidos normalmente e independientemente.</p>
-<p>Es decir, en la regresión no lineal, las estimaciones por mínimos cuadrados (o máxima verosimilitud) de los parámetros del modelo no poseen las propiedades atractivas que tienen sus contrapartes en la regresión lineal, como insesgamiento, varianza mínima o distribuciones muestrales normales. La inferencia estadística en regresión no lineal depende de resultados <strong>asintóticos</strong>. La teoría de muestras grandes generalmente se aplica tanto para errores distribuidos normalmente como no normales.</p>
-<p>Los resultados asintóticos clave pueden resumirse brevemente de la siguiente manera. En general, cuando el tamaño de la muestra <span class="math inline">\(n\)</span> es grande, el valor esperado de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente igual a <span class="math inline">\(\boldsymbol{\theta}\)</span>, el verdadero vector de estimaciones de parámetros, y la matriz de covarianza de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente <span class="math inline">\(\sigma^2(\hat{X}^\top \hat{X})^{-1}\)</span>, donde <span class="math inline">\(\hat{X}\)</span> es la matriz de derivadas parciales evaluadas en la estimación de mínimos cuadrados de la última iteración <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span>. Además, la distribución muestral de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente normal.</p>
-<p>En consecuencia, la inferencia estadística para regresión no lineal cuando el tamaño de muestra es grande se realiza exactamente igual que para regresión lineal. Las pruebas estadísticas e intervalos de confianza son solo procedimientos aproximados.</p>
-<section id="intervalos-y-regiones-de-confianza" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="intervalos-y-regiones-de-confianza"><span class="header-section-number">3.1</span> Intervalos y Regiones de confianza</h2>
-<p>Anteriormente comentamos que siguiendo las ideas de regresión lineal, podemos obtener aproximaciones para las regiones de confianza y los intervalos de confianza en el caso de regresión no lineal, cuando el tamaño de la muestra es grande. De esta manera, tenemos que los intervalos de confianza para <span class="math inline">\(\boldsymbol\theta\)</span> están dados por <span class="math display">\[
-    \widehat{\theta}_j \pm t(\alpha / 2; n-p) \sqrt{ MS_{\operatorname{Res}} C_{j j}}.
-\]</span> donde <span class="math inline">\(\hat{X}\)</span> es la matriz de derivadas parciales definida previamente, evaluada en la última iteración del estimador de mínimos cuadrados <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span>, <span class="math inline">\(C_{jj}\)</span> es la <span class="math inline">\(j\)</span>-ésima entrada en la diagonal de la matriz <span class="math inline">\(C = (\hat{X}^\top\hat{X})^{-1}\)</span>, <span class="math display">\[
-    \text{ECM} = \frac{S(\hat{\boldsymbol\theta})}{n-p}
-\]</span> es el error cuadrado medio, y <span class="math inline">\(t(n-p)\)</span> es la distribución t de Student de <span class="math inline">\(n-p\)</span> grados de libertad.</p>
-<p>De igual manera, las regiones de inferencia aproximada para un modelo no lineal se definen como <span id="eq-reg-con-non-lineal-model"><span class="math display">\[
-    (\theta - \hat{\theta})^{\top} \hat X^{\top} \hat X (\theta - \hat{\theta}) \leq p \text{ECM} F(p, n - p; \alpha)
-\qquad(3.1)\]</span></span> en donde <span class="math inline">\(F(p, n - p; \alpha)\)</span> es el cuantil superior <span class="math inline">\(\alpha\)</span> para la distribución F de Fisher con $p $ y <span class="math inline">\(n - p\)</span> grados de libertad.</p>
-<div id="exm-inter-conf" class="theorem example">
-<p><span class="theorem-title"><strong>Ejemplo 3.1</strong></span> Reconsideremos el modelo de Michaelis-Menten para los datos de puromicina analizados previamente. Para probar la significancia de la regresión (es decir, <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{1}=\theta_{2}=0\)</span>) podríamos usar un procedimiento similar a un ANOVA. Podemos calcular la suma total de cuadrados de las <span class="math inline">\(y\)</span> como <span class="math inline">\(SS_{T}=271\ 909.0\)</span>. Entonces, la suma de cuadrados del modelo o regresión es: <span class="math display">\[
-SS_{\text{modelo}} = SS_{T} - SS_{\text{Res}} = 271\ 410 - 1\ 195.4 = 270\ 214.6.
-\]</span> Por lo tanto, la prueba de significancia de la regresión es: <span class="math display">\[
-F_{0} = \frac{SS_{\text{modelo}}/2}{MS_{\text{Res}}} = \frac{270\ 214.6/2}{1\ 195.4/(12-2)} = 1\ 130.22,
-\]</span> y calculamos un valor <span class="math inline">\(P\)</span> aproximado a partir de la distribución <span class="math inline">\(F_{2,10}\)</span>. Este valor <span class="math inline">\(P\)</span> es considerablemente menor que <span class="math inline">\(0.0001\)</span>, por lo que podemos rechazar con seguridad la hipótesis nula y concluir que al menos uno de los parámetros del modelo es distinto de cero.</p>
-<p>Para probar hipótesis sobre los parámetros individuales del modelo, <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{1}=0\)</span> y <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{2}=0\)</span>, podríamos calcular estadísticos <span class="math inline">\(t\)</span> aproximados como: <span class="math display">\[
-t_{1} = \frac{\hat{\theta}_{1}}{\text{se}\left(\hat{\theta}_{1}\right)} = \frac{212.7}{6.9471} = 30.62
-\]</span> y <span class="math display">\[
-t_{2} = \frac{\hat{\theta}_{2}}{\text{se}\left(\hat{\theta}_{2}\right)} = \frac{0.0641}{0.00828} = 7.74.
-\]</span> Los valores <span class="math inline">\(P\)</span> aproximados para estos dos estadísticos de prueba son ambos menores que <span class="math inline">\(0.01\)</span>. Por lo tanto, podríamos concluir que ambos parámetros son distintos de cero con una confianza del <span class="math inline">\(99\%\)</span>.</p>
-<p>Los intervalos de confianza aproximados del <span class="math inline">\(95\%\)</span> de confianza para <span class="math inline">\(\theta_{1}\)</span> se encuentran de la siguiente manera: <span class="math display">\[
-\begin{array}{rcl}
-    \hat{\theta}_{1} - t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right) &amp;\leq \theta_{1} &amp;\leq \hat{\theta}_{1} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right)\\
-    212.7 - 2.228\,(6.9471) &amp;\leq \theta_{1} &amp;\leq 212.7 + 2.228\,(6.9471)\\
-    197.2 &amp;\leq \theta_{1} &amp;\leq 228.2.
-\end{array}
-\]</span> Análogamente, para <span class="math inline">\(\theta_2\)</span>: <span class="math display">\[
-\begin{array}{rcl}
-    t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right) &amp;\leq \theta_{2} &amp;\leq \hat{\theta}_{2} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right)\\
-    0.0641 - 2.228\,(0.00828) &amp;\leq \theta_{2} &amp;\leq 0.0641 + 2.228\,(0.00828)\\
-    0.0457 &amp;\leq \theta_{2} &amp;\leq 0.0825.
-\end{array}
-\]</span> En lo anterior también se puede ver que ninguno de los intervalos contiene al <span class="math inline">\(0\)</span>, lo que nos permite asegurar que ambos parámetros son distintos de cero con una confianza del <span class="math inline">\(95\%\)</span>.</p>
-</div>
-</section>
-<section id="validez-de-la-inferencia-aproximada" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="validez-de-la-inferencia-aproximada"><span class="header-section-number">3.2</span> Validez de la inferencia aproximada</h2>
-<p>Dado que las pruebas, procedimientos e intervalos de confianza en regresión no lineal se basan en teoría de grandes muestras y típicamente el tamaño de muestra en un problema de regresión no lineal puede no ser tan grande, es lógico cuestionar la validez de estos procedimientos. Sería deseable tener una guía o “regla general” que nos indique cuándo el tamaño de muestra es lo suficientemente grande para que los resultados asintóticos sean válidos. Desafortunadamente, no existe tal guía general. Sin embargo, existen algunos <strong>indicadores</strong> que sugieren que los resultados pueden ser válidos en una aplicación particular.</p>
+<section id="medidas-de-ajuste" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="medidas-de-ajuste"><span class="header-section-number">4.1</span> Medidas de ajuste</h2>
+<section id="análisis-de-residuos" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="análisis-de-residuos"><span class="header-section-number">4.1.1</span> Análisis de residuos</h3>
+<p>En el caso de regresión no lineal, tenemos las mismas hipótesis sobre los residuos que en el caso de regresión lineal. Así que, al igual que antes, podemos hacer un análisis de residuos completamente análogo al caso de regresión lineal. Para ello, se pueden considerar las 6 gráficas que consideramos antes:</p>
 <ol type="1">
-<li><p>Si el algoritmo de estimación de regresión no lineal converge en pocas iteraciones, esto indica que la aproximación lineal utilizada para resolver el problema fue muy satisfactoria, y es probable que los resultados asintóticos se apliquen adecuadamente. Una convergencia que requiere muchas iteraciones es un síntoma de que los resultados asintóticos podrían no aplicarse, y deberían considerarse otras verificaciones de adecuación.</p></li>
-<li><p>Se han desarrollado varias medidas de curvatura y no linealidad del modelo. Estas medidas describen cuantitativamente la adecuación de la aproximación lineal. Nuevamente, una aproximación lineal inadecuada indicaría que los resultados de inferencia asintótica son cuestionables.</p></li>
-<li><p>Se puede usar <strong>bootstrap</strong> para estudiar la distribución muestral de los estimadores, calcular errores estándar aproximados y encontrar intervalos de confianza aproximados. Podríamos calcular estimaciones bootstrap de estas cantidades y compararlas con los errores estándar e intervalos de confianza aproximados producidos por los resultados asintóticos. Una buena concordancia con las estimaciones bootstrap es un indicio de que los resultados de inferencia de grandes muestras son válidos.</p></li>
+<li>gráfico de residuos contra valores ajustados,</li>
+<li>gráfico de escala-ubicación de contra valores ajustados,</li>
+<li>gráfico Q-Q normal,</li>
+<li>gráfico de residuos contra las palancas,</li>
+<li>gráfico de distancias de Cook contra las etiquetas de las filas, y</li>
+<li>gráfico de distancias de Cook contra leverage/(1-leverage).</li>
 </ol>
-<p>Cuando hay indicios de que los resultados de inferencia asintótica no son válidos, tenemos pocas opciones a realizar. Una posibilidad es considerar una forma alternativa del modelo, si existe, o quizás un modelo de regresión no lineal diferente. A veces, gráficos de los datos y gráficos de diferentes funciones de respuesta esperada (<span class="math inline">\(f\)</span>) de modelos no lineales pueden ser útiles en este sentido. Alternativamente, se pueden usar los resultados de inferencia de remuestreo o bootstrap. Sin embargo, si el modelo es incorrecto o está mal especificado, hay pocas razones para creer que los resultados de remuestreo serán más válidos que los resultados de inferencia de grandes muestras.</p>
+<p>La desventaja, es que</p>
+</section>
+<section id="pseudo-r2" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="pseudo-r2"><span class="header-section-number">4.1.2</span> Pseudo-<span class="math inline">\(R^2\)</span></h3>
+<p>Al igual que en el caso de regresión lineal, podemos definir una “<span class="math inline">\(R^2\)</span>” para los modelos de regresión no lineal, dada por <span class="math display">\[
+    R^2 = 1 - \frac{SS_{Res}}{SS_T},
+\]</span> donde <span class="math display">\[
+    SS_{Res} = \sum_{i = 1}^{n}{\left(y_i - \hat{y_i} \right)^2}, \qquad SS_{T} = \sum_{i = 1}^{n}{\left(y_i - \bar{y} \right)^2}.
+\]</span> Sin embargo, en este caso esta ya no cuenta con las propiedades con las que contaba en los modelos de regresión lineal, pues:</p>
+<ul>
+<li>no puede ser superior a 1, pero sí inferior a 0;</li>
+<li>no puede interpretarse como la proporción de varianza explicada por el modelo.</li>
+</ul>
+<p>Esta es la razón por la que en modelos de regresión no lineal se le suele llamar pseudo-<span class="math inline">\(R^2\)</span> en vez de sólo <span class="math inline">\(R^2\)</span>.</p>
+<p>A pesar de esto, esta estadística sigue siendo de utilidad para revisar si el ajuste de un modelo es bueno. Si la pseudo-<span class="math inline">\(R^2\)</span> es cercana a 1, quiere decir que el ajuste ha sido muy bueno. En comparación, si el ajuste es cercano a 0 o incluso negativo, esto implica que hay problemas con el ajuste del modelo.</p>
+<p>Sobre todo, recordemos que la pseudo-<span class="math inline">\(R^2\)</span>, de forma similar a la <span class="math inline">\(R^2\)</span> en la regresión lineal múltiple, nunca debe utilizarse como base para seleccionar y comparar modelos de regresión alternativos. Para ello deben utilizarse otros estadísticos.</p>
+</section>
+</section>
+<section id="comparación-de-modelos" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="comparación-de-modelos"><span class="header-section-number">4.2</span> Comparación de modelos</h2>
+<p>En algunas situaciones, puede haber más de una función que podría utilizarse como modelo. Por ejemplo, al ajustar un modelo de doble exponencial, <span class="math display">\[
+    f(x,\theta) = \theta_1 e^{-\theta_2 x} + \theta_3 e^{-\theta_4 x},
+\]</span> <span class="math inline">\(\theta_4\)</span> podría ser 0, en cuyo caso el modelo se reduce a <span class="math display">\[
+    f(x,\theta) = \theta_1 e^{-\theta_2 x} + \theta_3,
+\]</span> o <span class="math inline">\(\theta_3\)</span> podría ser 0, reduciéndose a <span class="math display">\[
+    f(x,\theta) = \theta_1 e^{-\theta_2 x}.
+\]</span></p>
+<p>En esta situación de modelos anidados, estaríamos interesados en encontrar el modelo más simple que se ajuste adecuadamente a los datos.</p>
+<p>En otros casos, podríamos comparar modelos no anidados. Por ejemplo, el Modelo 1: <span class="math display">\[
+    f(x,\theta) = \theta_1 (1 - e^{-\theta_2 x}),
+\]</span> contra el Modelo 2: <span class="math display">\[
+    f(x,\theta) = \frac{\theta_1 x}{\theta_2 + x}.
+\]</span></p>
+<p>Ambos comienzan en $ f = 0 $ cuando $ x = 0 $ y se aproximan a la asíntota <span class="math inline">\(\theta_1\)</span> cuando $ x $. En estos casos, un modelo puede proporcionar un ajuste superior a los datos, y nos interesaría seleccionar dicho modelo.</p>
+<section id="modelos-anidados" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="modelos-anidados"><span class="header-section-number">4.2.1</span> Modelos anidados</h3>
+<p>Cuando comparamos varios modelos anidados, procedemos como en el caso lineal y utilizamos una prueba de razón de verosimilitud para decidir cuál es el modelo más simple que se ajusta adecuadamente a un conjunto de datos. Debido al supuesto de normalidad esférica, esto conduce a una evaluación de la suma de cuadrados adicional debida a los parámetros extra involucrados al pasar del modelo parcial al modelo completo.</p>
+<p>Denotemos por <span class="math inline">\(S\)</span> a la suma de cuadrados, <span class="math inline">\(\mathbf{v}\)</span> los grados de libertad y <span class="math inline">\(p\)</span> el número de parámetros, con subíndices <span class="math inline">\(T\)</span> y <span class="math inline">\(R\)</span> para los modelos completo y no completo, y un subíndice <span class="math inline">\(E\)</span> para extra, los cálculos se pueden resumir como en el cuadro <a href="#tbl-comparacion-modelos" class="quarto-xref">Tabla&nbsp;<span>4.1</span></a>. Para completar el análisis, comparamos el cociente <span class="math inline">\(s_{E}^{2}/s_{T}^{2}\)</span> con <span class="math inline">\(F(\mathbf{v}_{E},\mathbf{v}_{T};\mathbf{\alpha})\)</span> y aceptamos el modelo parcial si el cociente de cuadrados medios calculado es menor que el valor de la tabla. De lo contrario, retenemos los términos adicionales y usamos el modelo completo.</p>
+<p>O si prefieres usar la sintaxis de tablas de Quarto (sin LaTeX):</p>
+<div id="tbl-comparacion-modelos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-comparacion-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;4.1: Análisis de suma de cuadrados adicional para modelos anidados.
+</figcaption>
+<div aria-describedby="tbl-comparacion-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 20%">
+<col style="width: 21%">
+<col style="width: 17%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fuente</th>
+<th>Suma de Cuadrados</th>
+<th>Grados de Libertad</th>
+<th>Cuadrado Medio</th>
+<th>Razón F</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parámetros extra</td>
+<td><span class="math inline">\(S_{E} = S_{R}-S_{T}\)</span></td>
+<td><span class="math inline">\(\mathbf{v}_{E}=p_{T}-p_{R}\)</span></td>
+<td><span class="math inline">\(s_{E}^{2}=S_{E}/\mathbf{v}_{E}\)</span></td>
+<td><span class="math inline">\(s_{E}^{2}/s_{T}^{2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Modelo completo</td>
+<td><span class="math inline">\(S_{T}\)</span></td>
+<td><span class="math inline">\(\mathbf{v}_{T}=n-p_{T}\)</span></td>
+<td><span class="math inline">\(s_{T}^{2}=S_{T}/\mathbf{v}_{T}\)</span></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Modelo parcial</td>
+<td><span class="math inline">\(S_{R}\)</span></td>
+<td><span class="math inline">\(n-p_{R}\)</span></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Para modelos no lineales, en comparación a modelos lineales, el análisis es solo aproximado porque el cociente de cuadrados medios calculado no tendrá una distribución F exacta. Sin embargo, la distribución del cociente de cuadrados medios solo se ve afectada por la no linealidad intrínseca y no por la no linealidad de efectos de parámetros, además que la no linealidad intrínseca es generalmente pequeña. Cuando el modelo parcial es inadecuado, el efecto de la no linealidad intrínseca en el análisis puede ser grande, pero el modelo parcial se rechazará de todos modos: es solo cuando los valores ajustados están muy cercanos que la forma de la distribución es crítica. En estos casos, la no linealidad intrínseca generalmente tendrá un efecto pequeño porque las respuestas esperadas que se comparan están cercanas en la superficie de expectativa.</p>
+</section>
+<section id="modelos-no-anidados" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="modelos-no-anidados"><span class="header-section-number">4.2.2</span> Modelos no anidados</h3>
+<p>Al intentar decidir cuál de varios modelos no anidados es el mejor, el primer enfoque debe corresponder al investigador. Es decir, si existen razones científicas para preferir un modelo sobre los demás, se debe dar un peso considerable a las razones del investigador, ya que el objetivo principal del análisis de datos es explicar o dar cuenta del comportamiento de los datos, no simplemente obtener el mejor ajuste.</p>
+<p>Si el investigador no puede proporcionar razones convincentes para elegir un modelo sobre otros, entonces se pueden utilizar análisis estadísticos, siendo probablemente el más importante un análisis de los residuos. Generalmente, se debe elegir el modelo con el cuadrado medio residual más pequeño y los residuos de apariencia más aleatoria. Los residuos deben graficarse contra los valores predichos, las variables de control, el orden temporal y cualquier otra variable.</p>
+</section>
+</section>
+<section id="medidas-de-no-linealidad" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="medidas-de-no-linealidad"><span class="header-section-number">4.3</span> Medidas de no linealidad</h2>
+<p>{ }</p>
 
 
 </section>
@@ -681,13 +754,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../Caps/02-Definiciones.html" class="pagination-link" aria-label="Métodos de estimación">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></span>
+      <a href="../Caps/03-Inferencia.html" class="pagination-link" aria-label="Inferencia estadística en regresión no lineal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../Caps/04-Validacion.html" class="pagination-link" aria-label="Validación del modelo">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../references.html" class="pagination-link" aria-label="Referencias">
+        <span class="nav-page-text">Referencias</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

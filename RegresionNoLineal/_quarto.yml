@@ -10,6 +10,7 @@ book:
     - Caps/01-Introduccion.qmd
     - Caps/02-Definiciones.qmd
     - Caps/03-Inferencia.qmd
+    - Caps/04-Validacion.qmd
     - references.qmd
 
 bibliography: references.bib
