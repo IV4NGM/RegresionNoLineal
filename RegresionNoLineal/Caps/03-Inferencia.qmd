@@ -1,0 +1,95 @@
+\section{Inferencia estadística en regresión no lineal}
+
+En un \textbf{modelo de regresión lineal}, cuando los errores están distribuidos de forma normal e independiente, existen pruebas estadísticas exactas e intervalos de confianza basados en las distribuciones $t$ y $F$, y las estimaciones de los parámetros tienen propiedades estadísticas útiles y atractivas. Sin embargo, este no es el caso en la regresión no lineal, incluso cuando los errores están distribuidos normalmente e independientemente.
+
+Es decir, en la regresión no lineal, las estimaciones por mínimos cuadrados (o máxima verosimilitud) de los parámetros del modelo no poseen las propiedades atractivas que tienen sus contrapartes en la regresión lineal, como insesgamiento, varianza mínima o distribuciones muestrales normales. La inferencia estadística en regresión no lineal depende de resultados \textbf{asintóticos}. La teoría de muestras grandes generalmente se aplica tanto para errores distribuidos normalmente como no normales.
+
+Los resultados asintóticos clave pueden resumirse brevemente de la siguiente manera. En general, cuando el tamaño de la muestra $n$ es grande, el valor esperado de $\bm{\hat{\theta}}$ es aproximadamente igual a $\bm{\theta}$, el verdadero vector de estimaciones de parámetros, y la matriz de covarianza de $\bm{\hat{\theta}}$ es aproximadamente $\sigma^2(\hat{X}^\top \hat{X})^{-1}$, donde $\hat{X}$ es la matriz de derivadas parciales evaluadas en la estimación de mínimos cuadrados de la última iteración $\bm{\hat{\theta}}$. Además, la distribución muestral de $\bm{\hat{\theta}}$ es aproximadamente normal.
+
+En consecuencia, la inferencia estadística para regresión no lineal cuando el tamaño de muestra es grande se realiza exactamente igual que para regresión lineal. Las pruebas estadísticas e intervalos de confianza son solo procedimientos aproximados.
+
+\subsection{Intervalos y Regiones de confianza}
+
+%En el caso de regresión lineal, una región de confianza conjunta del $(1-\alpha)100\%$ para $\beta$, sabemos que está dada por el elipsoide
+%\begin{equation}\label{eq-conf-reg-mod-lin}
+%    (\bm\beta - \hat{\bm\beta})^\top X^\top X (\bm\beta - \hat{\bm\beta}) \leq p \ECM F(p, n-p;\alpha),
+%\end{equation}
+
+
+%%Geométricamente, esta región se produce porque la superficie de expectativa es un plano y el vector residual es ortogonal a dicho plano, por lo que la región de valores plausibles en el plano de expectativa es un disco. Al tomar el disco a través de la aplicación lineal que relaciona puntos en el plano de expectativa con puntos en el plano de parámetros, se mapea el disco a un elipsoide en el plano de parámetros.
+
+Anteriormente comentamos que siguiendo las ideas de regresión lineal, podemos obtener aproximaciones para las regiones de confianza y los intervalos de confianza en el caso de regresión no lineal, cuando el tamaño de la muestra es grande. De esta manera, tenemos que los intervalos de confianza para $\bm\theta$ están dados por
+\begin{equation}
+    \widehat{\theta}_j \pm t(\alpha / 2; n-p) \sqrt{ MS_{\operatorname{Res}} C_{j j}}.
+\end{equation}
+donde $\hat{X}$ es la matriz de derivadas parciales definida previamente, evaluada en la última iteración del estimador de mínimos cuadrados $\bm{\hat{\theta}}$, $C_{jj}$ es la $j$-ésima entrada en la diagonal de la matriz $C = (\hat{X}^\top\hat{X})^{-1}$,
+\[
+    \ECM = \frac{S(\hat{\bm\theta})}{n-p}
+\]
+es el error cuadrado medio, y $t(n-p)$ es la distribución t de Student de $n-p$ grados de libertad.
+
+De igual manera, las regiones de inferencia aproximada para un modelo no lineal se definen como
+\begin{equation}\label{eq-reg-con-non-lineal-model}
+    (\theta - \hat{\theta})^{\top} \hat X^{\top} \hat X (\theta - \hat{\theta}) \leq p \ECM F(p, n - p; \alpha)
+\end{equation}
+en donde \( F (p, n - p; \alpha) \) es el cuantil superior \(\alpha\) para la distribución F de Fisher con \( p \) y \( n - p \) grados de libertad.
+
+\textbf{Ejemplo.} Reconsideremos el modelo de Michaelis-Menten para los datos de puromicina analizados previamente. Para probar la significancia de la regresión (es decir, $H_{0}$: $\theta_{1}=\theta_{2}=0$) podríamos usar un procedimiento similar a un ANOVA. Podemos calcular la suma total de cuadrados de las $y$ como $SS_{T}=271\ 909.0$. Entonces, la suma de cuadrados del modelo o regresión es:
+\[
+SS_{\text{modelo}} = SS_{T} - SS_{\text{Res}} = 271\ 410 - 1\ 195.4 = 270\ 214.6.
+\]
+Por lo tanto, la prueba de significancia de la regresión es:
+\[
+F_{0} = \frac{SS_{\text{modelo}}/2}{MS_{\text{Res}}} = \frac{270\ 214.6/2}{1\ 195.4/(12-2)} = 1\ 130.22,
+\]
+y calculamos un valor $P$ aproximado a partir de la distribución $F_{2,10}$. Este valor $P$ es considerablemente menor que $0.0001$, por lo que podemos rechazar con seguridad la hipótesis nula y concluir que al menos uno de los parámetros del modelo es distinto de cero.
+
+Para probar hipótesis sobre los parámetros individuales del modelo, $H_{0}$: $\theta_{1}=0$ y $H_{0}$: $\theta_{2}=0$, podríamos calcular estadísticos $t$ aproximados como:
+\[
+t_{1} = \frac{\hat{\theta}_{1}}{\text{se}\left(\hat{\theta}_{1}\right)} = \frac{212.7}{6.9471} = 30.62
+\]
+y
+\[
+t_{2} = \frac{\hat{\theta}_{2}}{\text{se}\left(\hat{\theta}_{2}\right)} = \frac{0.0641}{0.00828} = 7.74.
+\]
+Los valores $P$ aproximados para estos dos estadísticos de prueba son ambos menores que $0.01$. Por lo tanto, podríamos concluir que ambos parámetros son distintos de cero con una confianza del $99\%$.
+
+Los intervalos de confianza aproximados del $95\%$ de confianza para $\theta_{1}$ se encuentran de la siguiente manera:
+\[
+\begin{array}{rcl}
+    \hat{\theta}_{1} - t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right) &\leq \theta_{1} &\leq \hat{\theta}_{1} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right)\\
+    212.7 - 2.228\,(6.9471) &\leq \theta_{1} &\leq 212.7 + 2.228\,(6.9471)\\
+    197.2 &\leq \theta_{1} &\leq 228.2.
+\end{array}
+\]
+Análogamente, para $\theta_2$:
+\[
+\begin{array}{rcl}
+    t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right) &\leq \theta_{2} &\leq \hat{\theta}_{2} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right)\\
+    0.0641 - 2.228\,(0.00828) &\leq \theta_{2} &\leq 0.0641 + 2.228\,(0.00828)\\
+    0.0457 &\leq \theta_{2} &\leq 0.0825.
+\end{array}
+\]
+En lo anterior también se puede ver que ninguno de los intervalos contiene al $0$, lo que nos permite asegurar que ambos parámetros son distintos de cero con una confianza del $95\%$.
+
+% \begin{comment}
+
+% {\color{blue} \textbf{SAMUEL}}
+
+% {\color{blue} ¿Será bueno agregar cosas de bandas de confianza para la respuesta esperada? Ver Bates and Watts Sec. 2.3.2. En dicho caso, también podríamos graficar a la puromicina con bandas de confianza. Si quieres agregarlo avísame porfa, para que haga las gráficas necesarias en R, y tú pones la parte de la teoría correspondiente.}
+
+% \end{comment}
+
+\subsection{Validez de la inferencia aproximada}
+
+Dado que las pruebas, procedimientos e intervalos de confianza en regresión no lineal se basan en teoría de grandes muestras y típicamente el tamaño de muestra en un problema de regresión no lineal puede no ser tan grande, es lógico cuestionar la validez de estos procedimientos. Sería deseable tener una guía o ``regla general'' que nos indique cuándo el tamaño de muestra es lo suficientemente grande para que los resultados asintóticos sean válidos. Desafortunadamente, no existe tal guía general. Sin embargo, existen algunos \textbf{indicadores} que sugieren que los resultados pueden ser válidos en una aplicación particular.
+
+\begin{enumerate}
+    \item Si el algoritmo de estimación de regresión no lineal converge en pocas iteraciones, esto indica que la aproximación lineal utilizada para resolver el problema fue muy satisfactoria, y es probable que los resultados asintóticos se apliquen adecuadamente. Una convergencia que requiere muchas iteraciones es un síntoma de que los resultados asintóticos podrían no aplicarse, y deberían considerarse otras verificaciones de adecuación.
+
+    \item Se han desarrollado varias medidas de curvatura y no linealidad del modelo. Estas medidas describen cuantitativamente la adecuación de la aproximación lineal. Nuevamente, una aproximación lineal inadecuada indicaría que los resultados de inferencia asintótica son cuestionables.
+
+    \item Se puede usar \textbf{bootstrap} para estudiar la distribución muestral de los estimadores, calcular errores estándar aproximados y encontrar intervalos de confianza aproximados. Podríamos calcular estimaciones bootstrap de estas cantidades y compararlas con los errores estándar e intervalos de confianza aproximados producidos por los resultados asintóticos. Una buena concordancia con las estimaciones bootstrap es un indicio de que los resultados de inferencia de grandes muestras son válidos.
+\end{enumerate}
+
+Cuando hay indicios de que los resultados de inferencia asintótica no son válidos, tenemos pocas opciones a realizar. Una posibilidad es considerar una forma alternativa del modelo, si existe, o quizás un modelo de regresión no lineal diferente. A veces, gráficos de los datos y gráficos de diferentes funciones de respuesta esperada ($f$) de modelos no lineales pueden ser útiles en este sentido. Alternativamente, se pueden usar los resultados de inferencia de remuestreo o bootstrap. Sin embargo, si el modelo es incorrecto o está mal especificado, hay pocas razones para creer que los resultados de remuestreo serán más válidos que los resultados de inferencia de grandes muestras.

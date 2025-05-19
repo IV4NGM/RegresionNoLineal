@@ -1,9 +1,146 @@
-# Introducción
+# Regresión no lineal
 
-## Motivación
+## Introducción
 
-Hola.
+Una tarea importante en estadística es encontrar las relaciones, si existen, en un conjunto de variables cuando al menos una es aleatoria, estando sujeta a fluctuaciones aleatorias y posiblemente a errores de medición. En los problemas de regresión, típicamente una de las variables, a menudo llamada *variable de respuesta* o *dependiente*, es de particular interés y se denota por ${y}$. Las otras variables ${x}_{1}, {x}_{2}, \ldots, {x}_{k}$, usualmente llamadas *variables explicativas*, *regresoras* o *independientes*, se utilizan principalmente para predecir o explicar el comportamiento de ${y}$. Si los gráficos de los datos sugieren alguna relación entre ${y}$ y las ${x}_{i}$, entonces esperaríamos expresar esta relación mediante alguna función $f$, es decir,
+$$
+    {y} \approx f({x}_{1}, {x}_{2}, \ldots, {x}_{k}).
+$$ {#eq-1}
+Usando $f$, podríamos entonces predecir ${y}$ para un conjunto dado de ${x}$. Por ejemplo, ${y}$ podría ser el precio de un automóvil usado de cierta marca, ${x}_{1}$ el número de dueños anteriores, ${x}_{2}$ la edad del automóvil y ${x}_{3}$ el kilometraje. Como en la @eq-1, las relaciones nunca pueden ser exactas, ya que los datos frecuentemente contendrán fluctuaciones no explicadas o ruido, y usualmente habrá algún grado de error de medición.
 
-## Antecedentes históricos
+Las variables explicativas pueden ser aleatorias o fijas (por ejemplo, controladas). Consideremos un experimento realizado para medir el rendimiento (${y}$) de trigo en varios niveles específicos de densidad de siembra (${x}_{1}$) y aplicación de fertilizante (${x}_{2}$). Entonces, tanto ${x}_{1}$ como ${x}_{2}$ son fijos. Si, al momento de la siembra, también se midió el pH del suelo (${x}_{3}$) en cada parcela, entonces ${x}_{3}$ sería aleatorio.
 
-Probando.
+A veces, la forma matemática apropiada para la relación en la @eq-1 es conocida, excepto por algunas constantes o coeficientes desconocidos (llamados *parámetros*), donde la relación está determinada por un proceso físico subyacente conocido o gobernado por leyes científicas aceptadas. Matemáticamente, la relación en la @eq-1 puede escribirse como
+$$
+    {y} \approx f({x}_{1}, {x}_{2}, \ldots, {x}_{k}; \boldsymbol{\theta}),
+$$ {#eq-2}
+donde $f$ es completamente conocida excepto por el vector de parámetros $\boldsymbol{\theta} = (\theta_{1}, \theta_{2}, \ldots, \theta_{p})^\top$, que necesita ser estimado. Por ejemplo,
+$$
+    {y} \approx \theta_1 e^{\theta_2 \boldsymbol{x}},
+$$
+y $\boldsymbol\theta = (\theta_1, \theta_2)^\top$. Dado que estos parámetros a menudo tienen interpretaciones físicas, uno de los objetivos principales de la investigación es estimar los parámetros con la mayor precisión posible. Frecuentemente, la relación en la @eq-2 es sugerida tentativamente por investigaciones teóricas. Otro de los objetivos es probar el ajuste de los datos al modelo.
+
+Sin embargo, en gran parte de la práctica estadística, particularmente en las ciencias biológicas, en oposición a las ciencias físicas, los procesos subyacentes son generalmente complejos y no son bien comprendidos. Esto significa que tenemos poca o ninguna idea sobre la forma de la relación, y nuestro objetivo es simplemente encontrar alguna función $f$ para la cual la @eq-2 se cumpla lo más cerca posible. Generalmente se asume que la relación "verdadera" pertenece a una familia paramétrica de la forma @eq-2, de modo que encontrar un modelo a menudo se reduce a estimar $\boldsymbol{\theta}$. En este caso, es importante utilizar una familia que sea lo suficientemente amplia y flexible para aproximar una variedad lo bastante extensa de formas funcionales. Si varios modelos ajustan los datos igualmente bien, usualmente elegiríamos el más simple (principio de parsimonia). Por ejemplo, podría usarse para predecir ${y}$, o incluso controlar ${y}$, ajustando las variables $\boldsymbol{x}$. En algunas situaciones, también podemos usar el modelo para calibración (predicción inversa), donde predecimos $\boldsymbol{x}$ para un nuevo valor de ${y}$. 
+
+En el análisis de regresión lineal, como vimos durante el curso, se utilizan modelos  con errores aditivos. Así, tenemos
+$$
+    \boldsymbol{y} = \beta_{0} + \beta_{1}\boldsymbol{x}_{1} + \cdots + \beta_{p-1}\boldsymbol{x}_{p-1} + \boldsymbol\varepsilon,
+$$
+donde $\boldsymbol\varepsilon \sim N_n(\boldsymbol 0, \sigma^2 I_n)$. Aquí, $\boldsymbol\beta = (\beta_{0}, \beta_{1}, \ldots, \beta_{p-1})^\top$, y las $\boldsymbol{x}_{i}$ pueden incluir transformaciones como cuadrados, productos cruzados, potencias superiores e incluso transformaciones (por ejemplo, logaritmos) de las mediciones originales. El requisito importante es que la expresión debe ser lineal en los parámetros. Por ejemplo,
+$$
+    \boldsymbol{y} = \beta_{0} + \beta_{1}\boldsymbol{x}_{1} + \beta_{2}\boldsymbol{x}_{2} + \beta_{3}\boldsymbol{x}_{1}^{2} + \beta_{4}\boldsymbol{x}_{2}^{2} + \beta_{5}\boldsymbol{x}_{1}\boldsymbol{x}_{2} + \boldsymbol\varepsilon
+$$
+y
+$$
+    \boldsymbol{y} = \beta_{0} + \beta_{1}\sin \boldsymbol{x}_{1} + \beta_{2}\sin \boldsymbol{x}_{2} + \boldsymbol\varepsilon
+$$
+son ambos modelos lineales. De estos ejemplos vemos que la familia de modelos lineales es muy flexible, por lo que a menudo se utiliza en ausencia de un modelo teórico para $f$.  
+
+Sin embargo, a menudo se cuenta con una expresión matemática que relaciona las variables de respuesta con las variables predictoras, y estos modelos suelen ser no lineales en sus parámetros. Incluso cuando una aproximación lineal funciona bien, un modelo no lineal aún puede usarse para mantener una interpretación clara de los parámetros. En tales casos, es necesario ampliar las técnicas de regresión lineal, lo que introduce una complejidad considerable. Por ejemplo
+$$
+    {y} = \theta_{0} + \theta_{1}e^{\theta_{2}{x}} + \varepsilon
+$$
+es un modelo no lineal, ya que es no lineal en $\theta_{2}$.
+
+Cualquier modelo que no sea lineal en los parámetros desconocidos es un **modelo de regresión no lineal**.
+
+## Modelos no lineales comunes
+
+A continuación presentamos varios ejemplos comunes de modelos no lineales, que nos permitirán entender el tipo de problemas que estaremos abordando, antes de entrar a los detalles de la regresión no lineal.
+
+::: {#exm-crec-exp}
+
+## Modelo exponencial de crecimiento.
+
+Malthus, economista británico afirmaba que la tasa de cambio de una población con respecto al tiempo era proporcional a la población. Si $t$ denota el tiempo, $y$ el tamaño de la población y $k$ la tasa de crecimiento, el modelo propuesto es
+$$
+    \frac{dy}{dt} = ky.
+$$
+Si suponemos que la población inicial $y(0) = \alpha$, se tiene que la solución es
+$$
+    y = \alpha e^{kt}.
+$$ {#eq-eje1}
+
+:::
+
+::: {#exm-crec-log}
+
+## Modelo logístico de crecimiento.
+
+Verhulst consideró una variante en la que el ambiente no puede soportar mas que cierta población máxima $M$, así que la población crece de manera acelerada y  a partir de cierto punto el tamaño de la población se ralentiza. Si $t$ denota el tiempo, $y$ el tamaño de la población, $k$ la tasa de crecimiento se tiene que 
+\begin{align*}
+    \frac{d y}{d t} = k y \left(1 - \frac{y}{M}\right).
+\end{align*}
+donde $y(t) \to M$ cuando $t \to \infty$. Suponiendo que la población inicial es $\alpha$, esto es $y(0) = \alpha$. Usando el método de separación de variables obtenemos
+\begin{align*}
+    y(t) = \frac{\alpha M}{(M - \alpha) e^{-kt} + \alpha}.
+\end{align*}
+El modelo logístico, con su característico comportamiento sigmoidal es muy utilizado como modelo de crecimiento. 
+
+:::
+
+::: {#exm-cinetico}
+
+Consideremos incorporar formalmente el efecto de la temperatura en un modelo cinético de segundo orden. Por ejemplo, la hidrólisis del acetato de etilo se modela adecuadamente mediante una cinética de segundo orden. Sea $A_{t}$ la cantidad de acetato de etilo en el tiempo $t$. El modelo de segundo orden es:
+$$
+\frac{dA_{t}}{dt} = -kA_{t}^{2},
+$$
+donde $k$ es la constante de velocidad. Las constantes de velocidad dependen de la temperatura, lo cual incorporaremos más adelante en nuestro modelo. Sea $A_{0}$ la cantidad de acetato de etilo en el tiempo cero. La solución a la ecuación de velocidad es
+$$
+\frac{1}{A_{t}} = \frac{1}{A_{0}} + kt.
+$$
+De esta manera, obtenemos
+$$
+A_{t} = \frac{A_{0}}{1 + A_{0}tk}.
+$$
+A continuación consideramos el impacto de la temperatura en la constante de velocidad. La ecuación de Arrhenius establece:
+$$
+k = C_{1}\exp\left(-\frac{E_{a}}{RT}\right),
+$$
+donde $E_{a}$ es la energía de activación y $C_{1}$ es una constante. Sustituyendo la ecuación de Arrhenius en la ecuación de velocidad obtenemos
+$$
+A_{t} = \frac{A_{0}}{1 + A_{0}tC_{1}\exp\left(-E_{a}/RT\right)}.
+$$
+Por lo tanto, un modelo adecuado de regresión no lineal es
+$$
+A_{t} = \frac{\theta_{1}}{1 + \theta_{2}t\exp\left(-\theta_{3}/T\right)} + \varepsilon_{t},
+$$
+donde $\theta_{1}=A_{0}$, $\theta_{2}=C_{1}A_{0}$ y $\theta_{3}=E_{a}/R$.
+
+:::
+
+Observemos que en todos los ejemplos, se presenta una relación no lineal respecto a los parámetros del modelo. Este es el tipo de funciones que se espera encontrar en los modelos de regresión no lineal.
+
+## El modelo de regresión no lineal
+
+
+En general, escribiremos el modelo de regresión no lineal como
+$$
+    y = f\left(\boldsymbol{x}, \boldsymbol{\theta}\right) + \varepsilon
+$$
+donde $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_p)^\top$ es un vector de tamaño $p \times 1$ de parámetros desconocidos y $\varepsilon$ es un término de error aleatorio no correlacionado con $\mathbb{E}(\varepsilon) = 0$ y $\text{Var}(\varepsilon) = \sigma^{2}$. También suponemos típicamente que los errores están distribuidos normales, como en la regresión lineal. Dado que
+\begin{align*}
+    \mathbb E\left({y}\right) &= \mathbb E\left[f\left(\boldsymbol{x}, \boldsymbol{\theta}\right) + \varepsilon\right]\\
+&= f\left(\boldsymbol{x}, \boldsymbol{\theta}\right)
+\end{align*}
+llamamos a $f(\boldsymbol{x}, \boldsymbol{\theta})$ la \textbf{función de respuesta esperada} o \textbf{función de expectativa} (\textit{expectation function}) para el modelo de regresión no lineal. Esto es muy similar al caso de regresión lineal, excepto que ahora la función de respuesta esperada es una \textbf{función no lineal} de los parámetros.
+
+En regresión lineal, las derivadas de la función de respuesta esperada no son funciones de los parámetros desconocidos. En un modelo de regresión no lineal, al menos una de las derivadas de la función de respuesta esperada con respecto a los parámetros depende de al menos uno de los parámetros. Para enfatizar la diferencia entre el modelo de regresión lineal y el modelo de regresión no lineal, denotaremos a los parámetros del modelo por $\boldsymbol{\beta} = (\beta_1, \ldots, \beta_p)^\top$ para el primero, mientras que para el segundo utilizaremos $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_p)^\top$. Ilustremos esto con un ejemplo, consideremos un modelo de regresión lineal:
+$$
+    \boldsymbol y = f\left(\boldsymbol{x},\boldsymbol{\beta}\right) + \boldsymbol \varepsilon = \beta_{0} + \sum_{j=1}^{k}\beta_{j}x_{j} + \boldsymbol \varepsilon.
+$$
+Ahora,
+$$
+\frac{\partial f\left(\boldsymbol{x},\boldsymbol{\beta}\right)}{\partial\beta_{j}} = x_{j}, \quad j=0,1, \ldots, k,
+$$
+donde $\boldsymbol x_{0} \equiv 1$. Nótese que en el caso lineal las derivadas son constantes con respecto a $\boldsymbol{\beta}$.
+
+Por otro lado, consideremos el modelo no lineal
+$$
+y = f\left(x,\boldsymbol{\theta}\right) + \varepsilon = \theta_{1}e^{\theta_{2}x} + \varepsilon.
+$$
+Las derivadas de la función expectativa con respecto a $\theta_{1}$ y $\theta_{2}$ son:
+$$
+\frac{\partial f\left(x,\boldsymbol{\theta}\right)}{\partial\theta_{1}} = e^{\theta_{2}x} \quad \text{y} \quad \frac{\partial f\left(x,\boldsymbol{\theta}\right)}{\partial\theta_{2}} = \theta_{1}xe^{\theta_{2}x}.
+$$
+Dado que las derivadas son función de los parámetros desconocidos $\theta_{1}$ y $\theta_{2}$, el modelo es no lineal.

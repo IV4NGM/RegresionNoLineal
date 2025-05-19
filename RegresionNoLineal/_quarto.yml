@@ -9,6 +9,7 @@ book:
     - index.qmd
     - Caps/01-Introduccion.qmd
     - Caps/02-Definiciones.qmd
+    - Caps/03-Inferencia.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -24,7 +25,11 @@ format:
     number-depth: 3
     code-fold: true
     code-summary: "Código"
-    html-math-method: mathjax
+    html-math-method:
+      method: mathjax
+      macros:
+        "\\E": "\\mathbb{E}"
+        "\\bm": "\\boldsymbol"
     lang: es
 
 #  pdf:
