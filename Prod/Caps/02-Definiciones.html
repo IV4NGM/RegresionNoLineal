@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Métodos de estimación – Regresión No Lineal</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../Caps/03-Inferencia.html" rel="next">
+<link href="../Caps/01-Introduccion.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Caps/02-Definiciones.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Regresión No Lineal</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentación</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Caps/01-Introduccion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión no lineal</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Caps/02-Definiciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Caps/03-Inferencia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Caps/04-Validacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#transformación-a-modelos-lineales" id="toc-transformación-a-modelos-lineales" class="nav-link active" data-scroll-target="#transformación-a-modelos-lineales"><span class="header-section-number">2.1</span> Transformación a modelos lineales</a></li>
+  <li><a href="#mínimos-cuadrados-no-lineales" id="toc-mínimos-cuadrados-no-lineales" class="nav-link" data-scroll-target="#mínimos-cuadrados-no-lineales"><span class="header-section-number">2.2</span> Mínimos cuadrados no lineales</a>
+  <ul class="collapse">
+  <li><a href="#estimadores-de-máxima-verosimilitud" id="toc-estimadores-de-máxima-verosimilitud" class="nav-link" data-scroll-target="#estimadores-de-máxima-verosimilitud"><span class="header-section-number">2.2.1</span> Estimadores de Máxima Verosimilitud</a></li>
+  </ul></li>
+  <li><a href="#estimación-de-parámetros-en-modelos-no-lineales" id="toc-estimación-de-parámetros-en-modelos-no-lineales" class="nav-link" data-scroll-target="#estimación-de-parámetros-en-modelos-no-lineales"><span class="header-section-number">2.3</span> Estimación de parámetros en modelos no lineales</a>
+  <ul class="collapse">
+  <li><a href="#geometría-de-mínimos-cuadrados-lineales-y-no-lineales" id="toc-geometría-de-mínimos-cuadrados-lineales-y-no-lineales" class="nav-link" data-scroll-target="#geometría-de-mínimos-cuadrados-lineales-y-no-lineales"><span class="header-section-number">2.3.1</span> Geometría de Mínimos Cuadrados Lineales y No Lineales</a></li>
+  <li><a href="#linealización-y-el-método-de-gauss-newton" id="toc-linealización-y-el-método-de-gauss-newton" class="nav-link" data-scroll-target="#linealización-y-el-método-de-gauss-newton"><span class="header-section-number">2.3.2</span> Linealización y el método de Gauss-Newton</a></li>
+  <li><a href="#estimación-de-de-la-varianza" id="toc-estimación-de-de-la-varianza" class="nav-link" data-scroll-target="#estimación-de-de-la-varianza"><span class="header-section-number">2.3.3</span> Estimación de de la varianza</a></li>
+  <li><a href="#perspectiva-gráfica-de-linealización" id="toc-perspectiva-gráfica-de-linealización" class="nav-link" data-scroll-target="#perspectiva-gráfica-de-linealización"><span class="header-section-number">2.3.4</span> Perspectiva gráfica de linealización</a></li>
+  <li><a href="#otros-métodos-de-estimación-de-parámetros" id="toc-otros-métodos-de-estimación-de-parámetros" class="nav-link" data-scroll-target="#otros-métodos-de-estimación-de-parámetros"><span class="header-section-number">2.3.5</span> Otros métodos de estimación de parámetros</a></li>
+  <li><a href="#valores-iniciales" id="toc-valores-iniciales" class="nav-link" data-scroll-target="#valores-iniciales"><span class="header-section-number">2.3.6</span> Valores iniciales</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="transformación-a-modelos-lineales" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="transformación-a-modelos-lineales"><span class="header-section-number">2.1</span> Transformación a modelos lineales</h2>
+<p>Se han proporcionado varios ejemplos en los que una relación de tendencia no lineal entre <span class="math inline">\(y\)</span> y <span class="math inline">\(x\)</span> puede transformarse para obtener una relación lineal. Debido a la relativa simplicidad de los métodos de regresión lineal, trabajar con el modelo linealizado es muy atractivo.</p>
+<p>A veces es útil considerar una <strong>transformación</strong> que induzca linealidad en la función de expectativa del modelo. Por ejemplo, consideremos el modelo <span id="eq-linea1"><span class="math display">\[
+    y = f(x, \boldsymbol\theta) + \varepsilon = \theta_1 e^{\theta_2 x} + \varepsilon
+\qquad(2.1)\]</span></span> La <a href="01-Introduccion.html#eq-eje1" class="quarto-xref">Ecuación&nbsp;<span>1.3</span></a> de crecimiento poblacional en el <a href="01-Introduccion.html#exm-crec-exp" class="quarto-xref">Ejemplo&nbsp;<span>1.1</span></a> es un ejemplo de este modelo. Dado que <span class="math inline">\(\mathbb{E}(y) = f(x, \theta) = \theta_1 e^{\theta_2 x}\)</span>, podemos linealizar la función de expectativa tomando logaritmos, <span class="math display">\[
+\ln \mathbb{E}(y) = \ln \theta_1 + \theta_2 x.
+\]</span> Por lo tanto, es tentador considerar reescribir el modelo como <span id="eq-linea2"><span class="math display">\[
+    \ln y = \ln \theta_1 + \theta_2 x + \varepsilon = \beta_0 + \beta_1 x + \varepsilon
+\qquad(2.2)\]</span></span> y usar regresión lineal simple para estimar <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span>. Sin embargo, las estimaciones por mínimos cuadrados lineales de los parámetros en la <a href="#eq-linea2" class="quarto-xref">Ecuación&nbsp;<span>2.2</span></a> generalmente no serán equivalentes a las estimaciones no lineales de los parámetros en el modelo original <a href="#eq-linea1" class="quarto-xref">Ecuación&nbsp;<span>2.1</span></a>. La razón es que en el modelo no lineal original, los mínimos cuadrados implican la minimización de la suma de residuos al cuadrado en <span class="math inline">\(y\)</span>, mientras que en el modelo transformado de la <a href="#eq-linea2" class="quarto-xref">Ecuación&nbsp;<span>2.2</span></a> estamos minimizando la suma de residuos al cuadrado en <span class="math inline">\(\ln y\)</span>.</p>
+<p>Además, notemos que en la <a href="#eq-linea1" class="quarto-xref">Ecuación&nbsp;<span>2.1</span></a> la estructura del error es aditiva, por lo que tomar logaritmos no puede producir el modelo en la <a href="#eq-linea2" class="quarto-xref">Ecuación&nbsp;<span>2.2</span></a>. Si la estructura del error es multiplicativa, por ejemplo <span class="math display">\[
+y = \theta_1 e^{\theta_2 x} \varepsilon
+\]</span> entonces tomar logaritmos será apropiado, ya que <span class="math display">\[
+\ln y = \ln \theta_1 + \theta_2 x + \ln \varepsilon = \beta_0 + \beta_1 x + \varepsilon^*
+\]</span> y si <span class="math inline">\(\varepsilon^*\)</span> sigue una distribución normal, todas las propiedades estándar del modelo de regresión lineal y la inferencia asociada serán aplicables.</p>
+<p>El problema a menudo gira en torno a la estructura del error, es decir, ¿se aplican los supuestos estándar sobre los errores al modelo no lineal original o al linealizado? Esta no siempre es una pregunta fácil de responder.</p>
+<div id="exm-Michaelis-Menten" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2.1 (Modelo de Michaelis–Menten)</strong></span> El modelo de <strong>Michaelis–Menten</strong> es un modelo de cinética química que relaciona la velocidad inicial de una reacción enzimática con la concentración de sustrato <span class="math inline">\(x\)</span>. Dicho modelo es <span id="eq-Puromicina"><span class="math display">\[
+    y = \frac{\theta_1 x}{x+\theta_2}+\varepsilon.
+\qquad(2.3)\]</span></span></p>
+<p>Se tienen datos de la velocidad inicial de una reacción para una enzima tratada con puromicina, y se desean estimar los coeficientes <span class="math inline">\(\theta_1\)</span> y <span class="math inline">\(\theta_2\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fitdistrplus)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Los datos son los siguientes:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Puromycin)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Puromycin)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  conc rate   state
+1 0.02   76 treated
+2 0.02   47 treated
+3 0.06   97 treated
+4 0.06  107 treated
+5 0.11  123 treated
+6 0.11  139 treated</code></pre>
+</div>
+</div>
+<p>A continuación haremos una gráfica para analizarlos visualmente.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> Puromycin <span class="sc">%&gt;%</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"treated"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>conc, data<span class="sc">$</span>rate, <span class="at">xlab =</span> <span class="st">"Concentración (ppm)"</span>, <span class="at">ylab =</span> <span class="st">"Velocidad"</span>, <span class="at">main =</span> <span class="st">"Velocidad de reacción Puromicina"</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Datos"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">20</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span>()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Podemos notar que la función de respuesta esperada puede ser linealizada fácilmente como sigue: <span class="math display">\[
+\frac{1}{f(x, \boldsymbol{\theta)}} = \frac{x+\theta_2}{\theta_1 x} = \frac{1}{\theta_1} + \frac{\theta_2}{\theta_1}x.
+\]</span></p>
+<p>Por lo tanto, un primer acercamiento es ajustar el modelo lineal <span class="math display">\[
+y^\star = \beta_0 + \beta_1 u + \varepsilon,
+\]</span> en donde <span class="math inline">\(y^\star = 1/y\)</span> y <span class="math inline">\(u = 1/x\)</span>. El modelo lineal ajustado resulta ser:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>linearmodel <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">I</span>(<span class="dv">1</span> <span class="sc">/</span> rate) <span class="sc">~</span> <span class="fu">I</span>(<span class="dv">1</span> <span class="sc">/</span> conc), <span class="at">data =</span> data)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linearmodel)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = I(1/rate) ~ I(1/conc), data = data)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-0.0043103 -0.0003742 -0.0000510  0.0004549  0.0038084 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 0.0051072  0.0007040   7.255 2.74e-05 ***
+I(1/conc)   0.0002472  0.0000321   7.700 1.64e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.001892 on 10 degrees of freedom
+Multiple R-squared:  0.8557,    Adjusted R-squared:  0.8413 
+F-statistic:  59.3 on 1 and 10 DF,  p-value: 1.642e-05</code></pre>
+</div>
+</div>
+<p>A continuación, veremos una gráfica del ajuste de dicho modelo.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>conc, data<span class="sc">$</span>rate, <span class="at">xlab =</span> <span class="st">"Concentración (ppm)"</span>, <span class="at">ylab =</span> <span class="st">"Velocidad"</span>, <span class="at">main =</span> <span class="st">"Velocidad de reacción Puromicina"</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>xslin <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">1.5</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xslin, <span class="dv">1</span> <span class="sc">/</span> (linearmodel<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> linearmodel<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">/</span> (xslin)))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Datos"</span>, <span class="st">"Regresión lineal"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"black"</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="cn">NA</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">1</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Para analizar el ajuste del modelo, podemos considerar las siguientes gráficas.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(linearmodel)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como podemos ver, los errores no parecen ser homocedásticos, y más aún, los residuales no parecen seguir una distribución normal. Para comprobarlo, hacemos la prueba de Anderson - Darling, y obtenemos:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ad.test</span>(linearmodel<span class="sc">$</span>residuals)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Anderson-Darling normality test
+
+data:  linearmodel$residuals
+A = 1.0423, p-value = 0.006107</code></pre>
+</div>
+</div>
+<p>Por lo tanto, este modelo no parece ser útil para explicar nuestros datos.</p>
+<p>Considerando que <span class="math inline">\(\beta_0 = 1/\theta_1\)</span> y <span class="math inline">\(\beta_1 = \theta_2/\theta_1\)</span>, los valores de <span class="math inline">\(\boldsymbol{\theta}\)</span> ajustados son:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unname</span>(<span class="fu">c</span>(<span class="dv">1</span> <span class="sc">/</span> linearmodel<span class="sc">$</span>coefficients[<span class="dv">1</span>], linearmodel<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">/</span> linearmodel<span class="sc">$</span>coefficients[<span class="dv">1</span>]))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 195.80270885   0.04840653</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="mínimos-cuadrados-no-lineales" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="mínimos-cuadrados-no-lineales"><span class="header-section-number">2.2</span> Mínimos cuadrados no lineales</h2>
+<p>Supongamos que tenemos una muestra de <span class="math inline">\(n\)</span> observaciones de la variable de respuesta y los regresores, digamos <span class="math inline">\(y_{i}, x_{i1}, x_{i2}, \ldots, x_{ik}\)</span>, para <span class="math inline">\(i=1,2,\ldots,n\)</span>. Recordemos que el modelo de regresión lineal está dado por <span class="math display">\[
+    \boldsymbol y = X \boldsymbol \beta + \boldsymbol \varepsilon,
+\]</span> donde <span class="math display">\[
+    \boldsymbol{y} = \left[\begin{array}{c}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{array}\right], \quad
+\boldsymbol{X_j}=\left[\begin{array}{c}
+x_{1j} \\
+x_{2j} \\
+\vdots \\
+x_{nj}
+\end{array}\right], \ j=1,\ldots,k \quad
+\boldsymbol{\beta}=\left[\begin{array}{c}
+\beta_{0} \\
+\beta_{1} \\
+\vdots \\
+\beta_{k}
+\end{array}\right], \quad
+\boldsymbol{\varepsilon}=\left[\begin{array}{c}
+\varepsilon_{1} \\
+\varepsilon_{2} \\
+\vdots \\
+\varepsilon_{n}
+\end{array}\right] \sim N(\boldsymbol 0, \sigma^2 I_n),
+\]</span> y <span class="math inline">\(X\)</span> es la matriz con columnas <span class="math display">\[
+    X = [\boldsymbol 1, \boldsymbol X_1, \ldots, \boldsymbol X_n];
+\]</span> y el método de mínimos cuadrados en regresión lineal implica minimizar la función de mínimos cuadrados <span class="math display">\[
+    S(\boldsymbol \beta) = \sum_{i = 1}^n \left(y_i - [X\boldsymbol \beta]_i\right)^2.
+\]</span></p>
+<p>Debido a que este es un modelo de regresión lineal, cuando diferenciamos <span class="math inline">\(S(\boldsymbol{\beta})\)</span> con respecto a los parámetros desconocidos e igualamos las derivadas a cero, las ecuaciones normales resultantes son ecuaciones <strong>lineales</strong>, y por lo tanto, son fáciles de resolver.</p>
+<p>Ahora consideremos la situación de regresión no lineal. El modelo es <span class="math display">\[
+y_{i} = f\left( \boldsymbol{x}_{i}, \boldsymbol{\theta} \right) + \varepsilon_{i}, \quad i=1,2,\ldots,n,
+\]</span> donde ahora <span class="math inline">\(\boldsymbol{x}_{i} = (x_{i1}, x_{i2}, \ldots, x_{ik})\)</span> para <span class="math inline">\(i=1,2,\ldots,n\)</span>. La función de mínimos cuadrados es <span class="math display">\[
+S(\boldsymbol{\theta}) = \sum_{i=1}^{n} \left( y_{i} - f\left( \boldsymbol{x}_{i}, \boldsymbol{\theta} \right) \right)^{2}.
+\]</span> Para encontrar las estimaciones de mínimos cuadrados debemos diferenciar la ecuación anterior con respecto a cada elemento de <span class="math inline">\(\boldsymbol{\theta}\)</span>. Esto proporcionará un conjunto de <span class="math inline">\(p\)</span> ecuaciones normales para la situación de regresión no lineal. Las ecuaciones normales son <span class="math display">\[
+\sum_{i=1}^{n} \left( y_{i} - f\left( \boldsymbol{x}_{i}, \boldsymbol{\theta} \right) \right) {\left[ \frac{\partial f\left( \boldsymbol{x}_{i}, \boldsymbol{\theta} \right)}{\partial \theta_{j}} \right]}_{\boldsymbol{\theta} = \hat{\boldsymbol{\theta}}} = 0 \quad \text{para } j=1,2,\ldots,p.
+\]</span> En un modelo de regresión no lineal, las derivadas de la función de respuesta esperada serán funciones de los parámetros desconocidos. Además, la función <span class="math inline">\(f\)</span> también es una función no lineal, por lo que las ecuaciones normales pueden ser muy difíciles de resolver. Al igual que en el modelo de regresión lineal, se espera que el número de datos <span class="math inline">\(n\)</span> sea mayor que el número de parámetros a estimar <span class="math inline">\(p\)</span>.</p>
+<div id="exm-mc" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2.2</strong></span> Consideremos el modelo de regresión no lineal <span class="math display">\[
+y = \theta_1 e^{\theta_2 x} + \varepsilon.
+\]</span> Las ecuaciones normales de mínimos cuadrados para este modelo son <span class="math display">\[
+\begin{split}
+    \sum_{i=1}^{n} \left( y_i - \hat{\theta}_1 e^{\hat{\theta}_2 x_i} \right) e^{\hat{\theta}_2 x_i} &amp;= 0,\\
+\sum_{i=1}^{n} \left( y_i - \hat{\theta}_1 e^{\hat{\theta}_2 x_i} \right) \hat{\theta}_1 x_i e^{\hat{\theta}_2 x_i} &amp;= 0.
+\end{split}
+\]</span> Después de simplificar, las ecuaciones normales quedan:</p>
+<p><span class="math display">\[
+\begin{split}
+    \sum_{i=1}^{n} y_i e^{\hat{\theta}_2 x_i} - \hat{\theta}_1 \sum_{i=1}^{n} e^{2\hat{\theta}_2 x_i} &amp;= 0,\\
+    \sum_{i=1}^{n} y_i x_i e^{\hat{\theta}_2 x_i} - \hat{\theta}_1 \sum_{i=1}^{n} x_i e^{2\hat{\theta}_2 x_i} &amp;= 0.
+\end{split}
+\]</span> Estas ecuaciones no son lineales en <span class="math inline">\(\hat{\theta}_1\)</span> y <span class="math inline">\(\hat{\theta}_2\)</span>, y no existe una solución cerrada simple.</p>
+</div>
+<p>En general, se deben usar <strong>métodos iterativos</strong> para encontrar los valores de <span class="math inline">\(\hat\theta_1\)</span> y <span class="math inline">\(\hat{\theta}_2\)</span>. Más aún, a veces existen múltiples soluciones para las ecuaciones normales. Es decir, hay múltiples valores estacionarios para la función de suma de cuadrados residuales <span class="math inline">\(S(\boldsymbol\theta)\)</span>.</p>
+<section id="estimadores-de-máxima-verosimilitud" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="estimadores-de-máxima-verosimilitud"><span class="header-section-number">2.2.1</span> Estimadores de Máxima Verosimilitud</h3>
+<p>Nos hemos enfocado en mínimos cuadrados para el caso no lineal. Sin embargo, si los términos de error en el modelo están distribuidos de forma normal e independiente con varianza constante, el método de máxima verosimilitud conducirá a mínimos cuadrados.</p>
+<p>En efecto, en el modelo no lineal <span class="math display">\[
+    y_i = f(\boldsymbol{x_i}; \boldsymbol{\theta}) + \varepsilon_i, \qquad i = 1, 2, \ldots, n,
+\]</span> si los errores están distribuidos normalmente e independientemente con media cero y varianza <span class="math inline">\(\sigma^2\)</span>, entonces la función de verosimilitud es: <span class="math display">\[
+L(\boldsymbol\theta, \sigma^2) = \frac{1}{(2\pi\sigma^2)^{n/2}} \exp\left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n \left[y_i - f(\boldsymbol{x}_i; \boldsymbol{\theta})\right]^2 \right].
+\]</span></p>
+<p>Claramente, maximizar esta función de verosimilitud es equivalente a minimizar la suma de cuadrados residuales. Por lo tanto, en el caso de teoría normal, las estimaciones por mínimos cuadrados son iguales a las estimaciones de máxima verosimilitud.</p>
+</section>
+</section>
+<section id="estimación-de-parámetros-en-modelos-no-lineales" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="estimación-de-parámetros-en-modelos-no-lineales"><span class="header-section-number">2.3</span> Estimación de parámetros en modelos no lineales</h2>
+<section id="geometría-de-mínimos-cuadrados-lineales-y-no-lineales" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="geometría-de-mínimos-cuadrados-lineales-y-no-lineales"><span class="header-section-number">2.3.1</span> Geometría de Mínimos Cuadrados Lineales y No Lineales</h3>
+<p>El estudio de la geometría del problema de mínimos cuadrados resulta útil para comprender las complejidades introducidas por un modelo no lineal. Para una muestra dada, la función de suma de cuadrados de los residuos <span class="math inline">\(S(\boldsymbol{\theta})\)</span> depende únicamente de los parámetros del modelo <span class="math inline">\(\boldsymbol{\theta}\)</span>. Por lo tanto, en el espacio de parámetros (definido por <span class="math inline">\(\theta_1, \theta_2, \ldots, \theta_p\)</span>), podemos representar la función <span class="math inline">\(S(\boldsymbol{\theta})\)</span> mediante un gráfico de contornos, donde cada contorno en la superficie corresponde a una línea de suma de cuadrados de residuos constante.</p>
+<p>Supongamos que el modelo de regresión es lineal; es decir, los parámetros son <span class="math inline">\(\boldsymbol{\theta} = \boldsymbol{\beta}\)</span>, y la función de suma de cuadrados de los residuos es <span class="math inline">\(S(\boldsymbol{\beta})\)</span>. La <a href="#fig-contornos" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> a) muestra el gráfico de contornos para este caso. Cuando el modelo es lineal en los parámetros desconocidos, los contornos son elipsoidales y presentan un único mínimo global en el estimador de mínimos cuadrados <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>.</p>
+<p>Cuando el modelo es no lineal, los contornos suelen adoptar la forma mostrada en la <a href="#fig-contornos" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> b). Nótese que estos contornos no son elípticos, sino bastante alargados y de forma irregular. Es muy común observar una apariencia en forma de “banana”. La forma y orientación específicas de los contornos de la suma de cuadrados de los residuos dependen tanto de la forma del modelo no lineal como de la muestra de datos obtenida. Con frecuencia, la superficie estará muy alargada cerca del óptimo, por lo que muchas soluciones para <span class="math inline">\(\boldsymbol{\theta}\)</span> producirán una suma de cuadrados de residuos cercana al mínimo global. Esto da lugar a un problema mal condicionado, donde suele ser difícil encontrar el mínimo global para <span class="math inline">\(\boldsymbol{\theta}\)</span>. En algunos casos, los contornos pueden ser tan irregulares que aparecen varios mínimos locales e incluso más de un mínimo global. La <a href="#fig-contornos" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> c) ilustra una situación con un mínimo global y posibles áreas donde podría detenerse el método numérico como posible mínimo.</p>
+<div id="fig-contornos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-contornos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="proy1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-contornos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.1: Geometría
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="linealización-y-el-método-de-gauss-newton" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="linealización-y-el-método-de-gauss-newton"><span class="header-section-number">2.3.2</span> Linealización y el método de Gauss-Newton</h3>
+<p>Un método ampliamente utilizado en algoritmos computacionales para regresión no lineal es la <strong>linealización</strong> de la función no lineal seguida de algún método para estimación de parámetros. Uno de los métodos más sencillos es el método de iteración <strong>Gauss-Newton</strong>. La linealización se logra mediante una expansión en <strong>series de Taylor</strong> de <span class="math inline">\(f(\boldsymbol x_i, \boldsymbol\theta)\)</span> alrededor del punto <span class="math inline">\(\boldsymbol\theta_0 = (\theta_{1}^{0}, \theta_{2}^{0}, \ldots, \theta_{p}^{0})\)</span>, conservando sólo los términos lineales. De aquí se obtiene el modelo aproximado <span id="eq-1-Sec1.3.1"><span class="math display">\[
+    f(\boldsymbol{x}_i, \boldsymbol{\theta}) \approx f(\boldsymbol{x}_i, \boldsymbol{\theta}_0) + \sum_{j=1}^p \left[ \frac{\partial f(\boldsymbol{x}_i, \boldsymbol{\theta})}{\partial \theta_j} \right]_{\boldsymbol{\theta} = \boldsymbol{\theta}_0} (\theta_j - \theta_{j}^{0}).
+\qquad(2.4)\]</span></span> Si definimos <span class="math display">\[
+\begin{split}
+    f_i^0 &amp;= f(\boldsymbol{x}_i, \boldsymbol{\theta}_0),\\
+    \beta_j^0 &amp;= \theta_j - \theta_{j}^{0},\\
+    X_{ij}^0 &amp;= \left[ \frac{\partial f(\boldsymbol{x}_i, \boldsymbol{\theta})}{\partial \theta_j} \right]_{\boldsymbol{\theta} = \boldsymbol{\theta}_0},
+\end{split}
+\]</span> observamos que el modelo de regresión no lineal puede escribirse como: <span id="eq-2-Sec1.3.1"><span class="math display">\[
+    y_i - f_i^0 = \sum_{j=1}^{p} \beta_j^0 X_{ij}^0 + \varepsilon_i, \quad i = 1, 2, \ldots, n.
+\qquad(2.5)\]</span></span> Es decir, ahora tenemos un modelo de regresión lineal. Normalmente llamamos a <span class="math inline">\(\boldsymbol{\theta}_{0}\)</span> los valores iniciales para los parámetros.</p>
+<p>Podemos escribir la <a href="#eq-2-Sec1.3.1" class="quarto-xref">Ecuación&nbsp;<span>2.5</span></a> como <span class="math display">\[
+\boldsymbol{y}_{0} = {X}_0 \boldsymbol{\beta}_{0} + \boldsymbol{\varepsilon},
+\]</span> por lo que la estimación de <span class="math inline">\(\boldsymbol{\beta}_{0}\)</span> es <span id="eq-Incrementos-Gauss-Newton"><span class="math display">\[
+    \boldsymbol{\hat{\beta}}_0 = ({X}_0^\top {X}_0)^{-1} {X}_0^\top \boldsymbol{y}_0 = ({X}_0^\top {X}_0)^{-1} {X}_0^\top (\boldsymbol{y} - \boldsymbol{f}_0)
+\qquad(2.6)\]</span></span> Dado que <span class="math inline">\(\boldsymbol{\beta}^{0} = \boldsymbol{\theta} - \boldsymbol{\theta}_{0}\)</span>, podemos definir <span class="math display">\[
+\boldsymbol{\hat{\theta}}_1 = \boldsymbol{\hat{\beta}}_0 + \boldsymbol{\theta}_0
+\]</span> como las nuevas estimaciones de <span class="math inline">\(\boldsymbol{\theta}\)</span>. A <span class="math inline">\(\boldsymbol{\hat{\beta}}_0\)</span> también se le conoce como <strong>vector de incrementos</strong>. Ahora podemos usar las nuevas estimaciones <span class="math inline">\(\boldsymbol{\hat{\theta}}_1\)</span> en la <a href="#eq-1-Sec1.3.1" class="quarto-xref">Ecuación&nbsp;<span>2.4</span></a> (en el mismo papel que jugaban las estimaciones iniciales <span class="math inline">\(\boldsymbol{\theta}_0\)</span>) para producir otro conjunto de estimaciones, digamos <span class="math inline">\(\boldsymbol{\hat{\theta}}_2\)</span>, y así sucesivamente.</p>
+<p>En general, en la <span class="math inline">\(k\)</span>-ésima iteración tenemos: <span id="eq-Incrementos.Sec1.3.1"><span class="math display">\[
+    \boldsymbol{\hat{\theta}}_{k+1} = \boldsymbol{\hat{\theta}}_k + \boldsymbol{\hat{\beta}}_k = \boldsymbol{\hat{\theta}}_k + ({X}_k^\top {X}_k)^{-1} {X}_k^\top (\boldsymbol{y} - \boldsymbol{f}_k),
+\qquad(2.7)\]</span></span> donde <span class="math display">\[
+\begin{split}
+    {X}_k &amp;= [X_{ij}^k],\\
+    \boldsymbol{f}_k &amp;= {[f_1^k, f_2^k, \ldots, f_n^k]}^\top,\\
+    \boldsymbol{\hat{\theta}}_k &amp;= {[\theta_{1}^k, \theta_{2}^k, \ldots, \theta_{p}^k]}^\top.
+\end{split}
+\]</span> Este proceso iterativo continúa hasta alcanzar la convergencia, es decir, hasta que <span class="math display">\[
+\frac{\hat{\theta}_{j}^{k+1} - \hat{\theta}_{j}^{k}}{\hat{\theta}_{j}^{k}} &lt; \delta, \quad j = 1, 2, \ldots, p,
+\]</span> donde <span class="math inline">\(\delta\)</span> es un número pequeño, por ejemplo <span class="math inline">\(1.0 \times 10^{-6}\)</span>. En cada iteración se debe evaluar la suma de cuadrados residual <span class="math inline">\(S(\boldsymbol{\hat{\theta}}_k)\)</span> para asegurar que se ha obtenido una reducción en su valor.</p>
+<div id="exm-puromicina-GN" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2.3</strong></span> Podemos usar el método Gauss-Newton para ajustar el modelo de Michaelis-Menten (<a href="#exm-Michaelis-Menten" class="quarto-xref">Ejemplo&nbsp;<span>2.1</span></a>) a los datos de puromicina anteriores, usando los valores iniciales <span class="math inline">\(\theta_{10} = 205\)</span> y <span class="math inline">\(\theta_{20} = 0.08\)</span>. Más adelante discutiremos cómo se obtuvieron estos valores iniciales. En este punto inicial, la suma de cuadrados residual <span class="math inline">\(S(\boldsymbol{\theta}_0) = 3155\)</span>. Para ilustrar cómo se calculan las cantidades requeridas, observemos que: <span class="math display">\[
+\frac{\partial f(x, \theta_1, \theta_2)}{\partial \theta_1} = \frac{x}{\theta_2 + x} \quad \text{y} \quad \frac{\partial f(x, \theta_1, \theta_2)}{\partial \theta_2} = \frac{-\theta_1 x}{\left(\theta_2 + x\right)^2}
+\]</span> Como la primera observación de <span class="math inline">\(x\)</span> es <span class="math inline">\(x_1 = 0.02\)</span>, tenemos: <span class="math display">\[
+X_{11}^0 = \left. \frac{x_1}{\theta_2 + x_1} \right|_{\theta_2 = 0.08} = \frac{0.02}{0.08 + 0.02} = 0.2,
+\]</span> y también, <span class="math display">\[
+X_{12}^0 = \left. \frac{-\theta_1 x_1}{\left(\theta_2 + x_1\right)^2} \right|_{\substack{\theta_1 = 205 \\ \theta_2 = 0.08}} = \frac{(-205)(0.02)}{\left(0.08 + 0.02\right)^2} = -410.
+\]</span> Las derivadas <span class="math inline">\(X_{ij}^0\)</span> se recopilan en la matriz <span class="math inline">\(\boldsymbol{X}_0\)</span> y el vector de incrementos se calcula a partir de la <a href="#eq-Incrementos-Gauss-Newton" class="quarto-xref">Ecuación&nbsp;<span>2.6</span></a> como: <span class="math display">\[
+\hat{\boldsymbol{\beta}}_0 = \begin{bmatrix}
+8.03 \\
+-0.017
+\end{bmatrix}.
+\]</span> La nueva estimación de <span class="math inline">\(\hat{\boldsymbol{\theta}}_1\)</span> a partir de la <a href="#eq-Incrementos.Sec1.3.1" class="quarto-xref">Ecuación&nbsp;<span>2.7</span></a> es: <span class="math display">\[
+\hat{\boldsymbol{\theta}}_1 = \hat{\boldsymbol{\beta}}_0 + \boldsymbol{\theta}_0
+=
+\begin{bmatrix}
+8.03 \\
+-0.017
+\end{bmatrix} +
+\begin{bmatrix}
+205.00 \\
+0.08
+\end{bmatrix}
+=
+\begin{bmatrix}
+213.03 \\
+0.063
+\end{bmatrix}.
+\]</span> La suma de cuadrados residual en este punto es <span class="math inline">\(S(\hat{\boldsymbol{\theta}}_1) = 1206\)</span>, que es considerablemente menor que <span class="math inline">\(S(\boldsymbol{\theta}_0)\)</span>. Por lo tanto, <span class="math inline">\(\hat{\boldsymbol{\theta}}_1\)</span> se adopta como la nueva estimación de <span class="math inline">\(\boldsymbol{\theta}\)</span>, y se realizaría otra iteración.</p>
+<p>El algoritmo Gauss-Newton converge en <span class="math inline">\(\hat{\boldsymbol{\theta}}^\top = [212.7,\, 0.0641]^\top\)</span> con <span class="math inline">\(S(\hat{\boldsymbol{\theta}}) = 1195\)</span>. Así, el modelo ajustado obtenido por linealización es: <span class="math display">\[
+\hat{y} = \frac{\hat{\theta}_1 x}{x + \hat{\theta}_2} = \frac{212.7 x}{x + 0.0641}
+\]</span> Estos cálculos pueden realizarse automáticamente con la función {{nls()}} de *R, como sigue.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nlmodel <span class="ot">&lt;-</span> <span class="fu">nls</span>(rate <span class="sc">~</span> Vm <span class="sc">*</span> conc <span class="sc">/</span> (K <span class="sc">+</span> conc), <span class="at">data =</span> data, <span class="at">start =</span> <span class="fu">list</span>(<span class="at">Vm =</span> <span class="dv">205</span>, <span class="at">K =</span> <span class="fl">0.08</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nlmodel)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Formula: rate ~ Vm * conc/(K + conc)
+
+Parameters:
+    Estimate Std. Error t value Pr(&gt;|t|)    
+Vm 2.127e+02  6.947e+00  30.615 3.24e-11 ***
+K  6.412e-02  8.281e-03   7.743 1.57e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.93 on 10 degrees of freedom
+
+Number of iterations to convergence: 5 
+Achieved convergence tolerance: 4.157e-06</code></pre>
+</div>
+</div>
+<p>Veamos la gráfica del modelo ajustado en este caso comparada con la obtenida por regresión lineal.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>conc, data<span class="sc">$</span>rate, <span class="at">xlab =</span> <span class="st">"Concentración (ppm)"</span>, <span class="at">ylab =</span> <span class="st">"Velocidad"</span>, <span class="at">main =</span> <span class="st">"Velocidad de reacción Puromicina"</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>xslin <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">1.5</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xslin, <span class="dv">1</span> <span class="sc">/</span> (linearmodel<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> linearmodel<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">/</span> (xslin)))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xslin, <span class="fu">coef</span>(nlmodel)[<span class="dv">1</span>] <span class="sc">*</span> xslin <span class="sc">/</span> (xslin <span class="sc">+</span> <span class="fu">coef</span>(nlmodel)[<span class="dv">2</span>]), <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span>()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Datos"</span>, <span class="st">"Regresión lineal"</span>, <span class="st">"Regresión no lineal"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"black"</span>, <span class="st">"blue"</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como podemos ver, los datos se explican de mejor manera por medio de la regresión no lineal. También podemos hacer un análisis gráfico del ajuste como a continuación.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfica de residuales</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(nlmodel), <span class="fu">residuals</span>(nlmodel), <span class="at">main =</span> <span class="st">"Residuals vs Fitted"</span>, <span class="at">xlab =</span> <span class="st">"Fitted values"</span>, <span class="at">ylab =</span> <span class="st">"Residuals"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PP-plot</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(nlmodel)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(residuals)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>empirical_probs <span class="ot">&lt;-</span> <span class="fu">ppoints</span>(n)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>empirical_quantiles <span class="ot">&lt;-</span> <span class="fu">sort</span>(residuals)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>theoretical_probs <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(empirical_quantiles,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean =</span> <span class="fu">mean</span>(residuals),</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> <span class="fu">sd</span>(residuals)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(theoretical_probs, empirical_probs,</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"P-P Plot of Residuals"</span>,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Theoretical Normal Probabilities"</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Empirical Probabilities"</span>,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="co"># Reference line (y = x)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como podemos ver, en este caso parecen cumplirse los supuestos de normalidad y homocedasticidad de los errores. Podemos comprobarlo también con la prueba de Anderson - Darling como sigue:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ad.test</span>(residuals)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Anderson-Darling normality test
+
+data:  residuals
+A = 0.31888, p-value = 0.4885</code></pre>
+</div>
+</div>
+<p>Como vemos, bajo esta prueba, no podemos rechazar la hipótesis de normalidad, y no parece violarse la de homocedasticidad, así que este modelo es más apropiado que el obtenido en regresión lineal.</p>
+</div>
+</section>
+<section id="estimación-de-de-la-varianza" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="estimación-de-de-la-varianza"><span class="header-section-number">2.3.3</span> Estimación de de la varianza</h3>
+<p>Cuando el procedimiento de estimación converge a un vector final de estimaciones de parámetros <span class="math inline">\(\hat{\theta}\)</span>, podemos obtener una estimación de la varianza del error <span class="math inline">\(\sigma^2\)</span> mediante el error cuadrático medio <span class="math display">\[
+\hat{\sigma}^2 = MS_{\text{Res}} = \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{n-p} = \frac{\sum_{i=1}^{n}\left[y_i - f(\boldsymbol{x}_i, \boldsymbol{\hat{\theta}})\right]^2}{n-p} = \frac{S(\boldsymbol{\hat{\theta}})}{n-p},
+\]</span> en donde <span class="math inline">\(p\)</span> es el número de parámetros en el modelo de regresión no lineal. También podemos estimar la <strong>matriz de covarianzas asintótica</strong> (para muestras grandes) del vector de parámetros <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> como <span id="eq-Var-asintotica"><span class="math display">\[
+    \operatorname{Var}(\boldsymbol{\hat{\theta}})=\sigma^2 {\left(\hat{X}^\top \hat{X}\right)}^{-1},
+\qquad(2.8)\]</span></span> en donde <span class="math inline">\(\hat{X}\)</span> es la matriz de derivadas parciales definida previamente, evaluada en la última iteración del estimador de mínimos cuadrados <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span>.</p>
+<div id="exm-puromicina-var" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2.4</strong></span> Para los datos de Puromicina, encontramos que la suma de cuadrados residual en la iteración final fue <span class="math inline">\(S(\hat{\boldsymbol{\theta}}) = 1195\)</span>, por lo que la estimación de <span class="math inline">\(\sigma^2\)</span> es: <span class="math display">\[
+\hat{\sigma}^2 = \frac{S(\hat{\boldsymbol{\theta}})}{n - p} = \frac{1195}{12 - 2} = 119.5.
+\]</span> También podemos estimar la matriz de covarianza asintótica mediante la <a href="#eq-Var-asintotica" class="quarto-xref">Ecuación&nbsp;<span>2.8</span></a> como: <span class="math display">\[
+\operatorname{Var}(\boldsymbol{\hat{\theta}})=\sigma^2 {\left(\hat{X}^\top \hat{X}\right)}^{-1} = 119.5 \begin{bmatrix}
+0.4037 &amp; 36.82 \times 10^{-5} \\
+36.82 \times 10^{-5} &amp; 57.36 \times 10^{-8}
+\end{bmatrix}
+\]</span> Los elementos de la diagonal principal de esta matriz son las varianzas aproximadas de las estimaciones de los coeficientes de regresión. Por lo tanto, los errores estándar aproximados de los coeficientes son: <span class="math display">\[
+\text{se}(\hat{\theta}_1) = \sqrt{\text{Var}(\hat{\theta}_1)} = \sqrt{119.5 (0.4037)} = 6.95
+\]</span> y <span class="math display">\[
+\text{se}(\hat{\theta}_2) = \sqrt{\text{Var}(\hat{\theta}_2)} = \sqrt{119.5 (57.36 \times 10^{-8})} = 8.28 \times 10^{-3},
+\]</span> y la correlación entre <span class="math inline">\(\hat{\theta}_1\)</span> y <span class="math inline">\(\hat{\theta}_2\)</span> es aproximadamente: <span class="math display">\[
+\frac{36.82 \times 10^{-5}}{\sqrt{0.4037 (57.36 \times 10^{-8})}} = 0.77.
+\]</span></p>
+</div>
+</section>
+<section id="perspectiva-gráfica-de-linealización" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="perspectiva-gráfica-de-linealización"><span class="header-section-number">2.3.4</span> Perspectiva gráfica de linealización</h3>
+<p>Hemos observado que la función de suma de cuadrados de los residuos <span class="math inline">\(S(\boldsymbol{\theta})\)</span> para un modelo de regresión no lineal suele ser una función irregular con forma de “plátano”, como se muestra en las graficas b) y c) de la <a href="#fig-contornos" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> ( P)or otro lado, la función de suma de cuadrados de los residuos para los mínimos cuadrados lineales tiene un comportamiento estable (<a href="#fig-contornos" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> a)). La técnica de linealización convierte el problema de regresión no lineal en una secuencia de problemas lineales, comenzando en el punto <span class="math inline">\(\boldsymbol{\theta}_0\)</span>.</p>
+<p>La primera iteración de la linealización reemplaza los contornos irregulares con un conjunto de contornos elípticos. Los contornos irregulares de <span class="math inline">\(S(\boldsymbol{\theta})\)</span> pasan exactamente por el punto de partida. El punto <span class="math inline">\(\boldsymbol{\theta}_0\)</span>, como se muestra en la <a href="#fig-linealización" class="quarto-xref">Figura&nbsp;<span>2.2</span></a> a), es donde comienza el proceso. Al resolver el problema linealizado, nos movemos hacia el mínimo global en el conjunto de contornos elípticos. Esto se logra mediante mínimos cuadrados lineales ordinarios. Luego, la siguiente iteración repite el proceso, comenzando desde la nueva solución <span class="math inline">\(\hat{\boldsymbol{\theta}}_1\)</span>. La evolución final de la linealización es una secuencia de problemas lineales cuyas soluciones se “acerca” al mínimo global de la función no lineal, como se ilustra en la <a href="#fig-linealización" class="quarto-xref">Figura&nbsp;<span>2.2</span></a> b). Siempre que el problema no lineal no esté demasiado mal condicionado (ya sea por un modelo mal especificado o datos insuficientes), el procedimiento de linealización debería converger a una buena estimación del mínimo global en pocas iteraciones.</p>
+<p>La linealización se facilita con un buen valor inicial <span class="math inline">\(\boldsymbol{\theta}_0\)</span>, es decir, uno que esté razonablemente cerca del mínimo global. Por ende, cuando <span class="math inline">\(\boldsymbol{\theta}_0\)</span> está cerca de <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>, los contornos reales de la suma de cuadrados de los residuos del problema no lineal suelen aproximarse bien mediante los contornos del problema linealizado.</p>
+<p>Sin embargo, al tratarse de aproximaciones, es de esperar que si el problema está mal condicionado. Por lo que escoger un buen valor inicial es de suma importancia. Más adelante retomamos este tema, dónde discutimos las ideas básicas sobre cómo escoger buenos valores iniciales.</p>
+<div id="fig-linealización" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-linealización-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="proy2.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-linealización-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: Linealización
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="otros-métodos-de-estimación-de-parámetros" class="level3" data-number="2.3.5">
+<h3 data-number="2.3.5" class="anchored" data-anchor-id="otros-métodos-de-estimación-de-parámetros"><span class="header-section-number">2.3.5</span> Otros métodos de estimación de parámetros</h3>
+<p>El método de linealización básico descrito anteriormente puede converger muy lentamente en algunos problemas. En otros casos, puede generar un movimiento en la dirección equivocada, con la función de suma de cuadrados residuales <span class="math inline">\(S(\hat{\boldsymbol{\theta}}_k)\)</span> aumentando en realidad en la <span class="math inline">\(k\)</span>-ésima iteración. En casos extremos, puede fallar completamente en converger. En consecuencia, se han desarrollado otras técnicas para resolver el problema de regresión no lineal. Algunas de ellas son modificaciones y refinamientos del esquema de linealización. En esta sección presentamos una breve descripción de algunos de estos procedimientos.</p>
+<p><strong>Método de Newton-Raphson</strong></p>
+<p>Otro método ampliamente utilizado en la estimación de parámetros en modelos de regresión no lineal es el método iterativo de <strong>Newton-Raphson</strong>, el cual puede verse como una extensión del método de Gauss-Newton. Este método se basa en una aproximación cuadrática a la función objetivo, en este caso <span class="math inline">\(S(\boldsymbol{\theta})\)</span>. Supongamos que <span class="math inline">\(\boldsymbol{\theta}_0\)</span> es un valor inicial cercano al valor óptimo. Entonces, podemos aproximar <span class="math inline">\(S(\boldsymbol{\theta})\)</span> mediante una expansión de Taylor de segundo orden alrededor de <span class="math inline">\(\boldsymbol{\theta}_0\)</span>: <span class="math display">\[
+S(\boldsymbol{\theta}) \approx S(\boldsymbol{\theta}_0) + (\boldsymbol{\theta} - \boldsymbol{\theta}_0)^\top \nabla S(\boldsymbol{\theta}_0) + \frac{1}{2} (\boldsymbol{\theta} - \boldsymbol{\theta}_0)^\top H_S(\boldsymbol{\theta}_0) (\boldsymbol{\theta} - \boldsymbol{\theta}_0),
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(\nabla S(\boldsymbol{\theta}_0)\)</span> es el gradiente de <span class="math inline">\(S\)</span> evaluado en <span class="math inline">\(\boldsymbol{\theta}_0\)</span>, y</li>
+<li><span class="math inline">\(H_S(\boldsymbol{\theta}_0)\)</span> es el Hessiano de <span class="math inline">\(S\)</span> evaluado en <span class="math inline">\(\boldsymbol{\theta}_0\)</span>.</li>
+</ul>
+<p>El mínimo local de <span class="math inline">\(S(\boldsymbol{\theta})\)</span> (en caso de que <span class="math inline">\(H_S(\boldsymbol{\theta}_0)\)</span> sea definida positiva) ocurre cuando <span class="math display">\[
+\nabla S(\boldsymbol{\theta}_0) + H_S(\boldsymbol{\theta}_0)(\boldsymbol{\theta} - \boldsymbol{\theta}_0) = \boldsymbol{0},
+\]</span> lo que lleva a la siguiente regla de actualización: <span class="math display">\[
+\boldsymbol{\theta}_1 = \boldsymbol{\theta}_0 - H_S(\boldsymbol{\theta}_0)^{-1} \nabla S(\boldsymbol{\theta}_0).
+\]</span> De forma general, el procedimiento iterativo se expresa como: <span class="math display">\[
+\boldsymbol{\hat{\theta}}_{k+1} = \boldsymbol{\hat{\theta}}_k - H_S(\boldsymbol{\hat{\theta}}_k)^{-1} \nabla S(\boldsymbol{\hat{\theta}}_k).
+\]</span></p>
+<p>En el contexto de regresión no lineal, escribimos la función de pérdida como <span class="math display">\[
+S(\boldsymbol{\theta}) = \|\boldsymbol{r}(\boldsymbol{\theta})\|^2, \quad \text{donde} \quad \boldsymbol{r}(\boldsymbol{\theta}) = \boldsymbol{y} - \boldsymbol{f}(\boldsymbol{\theta}),
+\]</span> por lo que, aplicando la regla de la cadena: <span class="math display">\[
+\nabla S(\boldsymbol{\theta}) = -2 J_f(\boldsymbol{\theta})^\top \boldsymbol{r}(\boldsymbol{\theta}),
+\]</span> y <span class="math display">\[
+H_S(\boldsymbol{\theta}) = 2 J_f(\boldsymbol{\theta})^\top J_f(\boldsymbol{\theta}) - 2 \sum_{i=1}^n r_i(\boldsymbol{\theta}) \, H_{f_i}(\boldsymbol{\theta}),
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(J_f(\boldsymbol{\theta})\)</span> es el **jacobiano de <span class="math inline">\(\boldsymbol{f}\)</span> respecto a <span class="math inline">\(\boldsymbol{\theta}\)</span>, y</li>
+<li><span class="math inline">\(H_{f_i}(\boldsymbol{\theta})\)</span> es el <strong>hessiano</strong> de la componente <span class="math inline">\(f_i\)</span> respecto a <span class="math inline">\(\boldsymbol{\theta}\)</span>.</li>
+</ul>
+<p>En la práctica, frecuentemente se descarta el segundo término del Hessiano (que involucra las segundas derivadas de <span class="math inline">\(\boldsymbol{f}\)</span>), obteniendo así el método de <strong>Gauss-Newton</strong> como una aproximación al método de Newton-Raphson. Esta omisión se justifica porque <span class="math inline">\(J_f^\top J_f\)</span> es simétrica y semidefinida positiva, lo que garantiza que la dirección de búsqueda sea de descenso, mientras que el término que involucra los Hessianos de <span class="math inline">\(f_i\)</span> puede introducir inestabilidades.</p>
+<p><strong>Método del Descenso por Gradiente</strong></p>
+<p>El método del descenso por gradiente intenta encontrar el mínimo global de la función de suma de cuadrados residuales mediante minimización directa. El objetivo es moverse desde un punto inicial <span class="math inline">\(\boldsymbol{\theta}_0\)</span> en una dirección vectorial con componentes dadas por las derivadas de la función de suma de cuadrados residuales con respecto a los elementos de <span class="math inline">\(\boldsymbol{\theta}\)</span>, es decir, en dirección <span class="math inline">\(\nabla S(\boldsymbol \theta)\)</span>. Usualmente estas derivadas se estiman ajustando una aproximación de primer orden o planar alrededor del punto <span class="math inline">\(\boldsymbol{\theta}_0\)</span>. Los coeficientes de regresión en el modelo de primer orden se toman como aproximaciones a las primeras derivadas.</p>
+<p>La principal desventaja de este método para resolver el problema de regresión no lineal es que puede converger muy lentamente. El descenso por gradiente generalmente funciona mejor cuando el punto inicial está muy alejado del óptimo. Sin embargo, a medida que la solución actual se acerca al óptimo, el procedimiento producirá movimientos cada vez más cortos y un comportamiento “en zig-zag”. Este es el problema de convergencia mencionado anteriormente.</p>
+<p><strong>Incrementos fraccionarios</strong></p>
+<p>Una modificación estándar a la técnica de linealización es el uso de <strong>incrementos fraccionarios</strong>. Para describir este método, sea <span class="math inline">\(\hat{\boldsymbol{\beta}}_{k}\)</span> el vector de incremento estándar en la <a href="#eq-Incrementos.Sec1.3.1" class="quarto-xref">Ecuación&nbsp;<span>2.7</span></a> en la <span class="math inline">\(k\)</span>-ésima iteración, pero en este caso continuamos a la siguiente iteración solo si <span class="math inline">\(S\left(\hat{\boldsymbol{\theta}}_{k+1}\right) &lt; S\left(\hat{\boldsymbol{\theta}}_{k}\right)\)</span>. Si <span class="math inline">\(S\left(\hat{\boldsymbol{\theta}}_{k+1}\right) &gt; S\left(\hat{\boldsymbol{\theta}}_{k}\right)\)</span>, se usa <span class="math inline">\(\hat{\boldsymbol{\beta}}_{k}/2\)</span> como vector de incrementos. Esta división podría usarse varias veces durante una iteración, si es necesario.</p>
+<p>Si después de un número específico de intentos no se obtiene una reducción en <span class="math inline">\(S\left(\hat{\boldsymbol{\theta}}_{k+1}\right)\)</span>, el procedimiento se termina. La idea general detrás de este método es evitar que el procedimiento de linealización realice un paso demasiado grande en cualquier iteración. La técnica de incrementos fraccionarios es útil cuando se encuentran problemas de convergencia en el procedimiento de linealización básico.</p>
+<p><strong>Método de Marquardt</strong></p>
+<p>Otra modificación popular al algoritmo básico de linealización fue desarrollada por Marquardt en 1963. Él propuso calcular el vector de incrementos en la <span class="math inline">\(k\)</span>-ésima iteración mediante: <span id="eq-Levenberg"><span class="math display">\[
+    \left({X}_{k}^{\top}{X}_{k} + \lambda\boldsymbol{I}_{p}\right)\hat{\boldsymbol{\beta}}_{k} = {X}_{k}^{\top}\left(\boldsymbol{y} - \boldsymbol{f}_{k}\right)
+\qquad(2.9)\]</span></span> donde <span class="math inline">\(\lambda &gt; 0\)</span>. Notemos la similitud con el estimador de regresión Ridge estudiado en el curso. Dado que las variables regresoras son derivadas de la misma función, la función linealizada podría generar problemas de multicolinealidad. Por lo tanto, el procedimiento tipo Ridge en la <a href="#eq-Levenberg" class="quarto-xref">Ecuación&nbsp;<span>2.9</span></a> es intuitivamente razonable. Marquardt usó un procedimiento de búsqueda para encontrar un valor de <span class="math inline">\(\lambda\)</span> que redujera la suma de cuadrados residual en cada etapa.</p>
+<p>Diferentes programas computacionales seleccionan <span class="math inline">\(\lambda\)</span> de distintas formas, por ejemplo, algunos comienzan con <span class="math inline">\(\lambda = 10^{-8}\)</span>. Se realizan una serie de cálculos de prueba y error en cada iteración con <span class="math inline">\(\lambda\)</span> multiplicado repetidamente por <span class="math inline">\(10\)</span> hasta que: <span class="math display">\[
+S\left(\hat{\boldsymbol{\theta}}_{k+1}\right) &lt; S\left(\hat{\boldsymbol{\theta}}_{k}\right)
+\]</span> El procedimiento también implica reducir <span class="math inline">\(\lambda\)</span> por un factor de <span class="math inline">\(10\)</span> en cada iteración mientras se satisfaga la desigualdad anterior. La estrategia es mantener <span class="math inline">\(\lambda\)</span> tan pequeño como sea posible mientras se asegura que la suma de cuadrados residual se reduzca en cada iteración. Este procedimiento general se denomina a menudo <strong>método de Marquardt</strong> (<em>Marquardt’ s Compromise</em>), porque el vector resultante de incrementos producido por su método generalmente se encuentra entre el vector Gauss-Newton en el vector de linealización y la dirección del descenso más pronunciado.</p>
+<p>A continuación se muestra una comparación entre los distintos métodos de estimación discutidos. Para ello, se considera un modelo de la forma <span class="math display">\[
+    y = e^{\theta x} + \varepsilon,
+\]</span> donde <span class="math inline">\(\varepsilon \sim N(0,0.05)\)</span>. Para poder realizar la comparación, simulamos datos siguiendo el modelo anterior con un parámetro verdadero de <span class="math inline">\(\theta = -1.5\)</span> y comparamos la convergencia de los distintos métodos graficando los resultados de cada una de las iteraciones.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos simulados</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="at">length.out =</span> n)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>true_theta <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1.5</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">exp</span>(true_theta <span class="sc">*</span> x) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Función de suma de mínimos cuadrados</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>rss <span class="ot">&lt;-</span> <span class="cf">function</span>(theta) {</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((y <span class="sc">-</span> <span class="fu">exp</span>(theta <span class="sc">*</span> x))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gradiente de suma de mínimos cuadrados</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>grad_rss <span class="ot">&lt;-</span> <span class="cf">function</span>(theta) {</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(x <span class="sc">*</span> <span class="fu">exp</span>(theta <span class="sc">*</span> x) <span class="sc">*</span> (y <span class="sc">-</span> <span class="fu">exp</span>(theta <span class="sc">*</span> x)))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Hesiano de suma de mínimos cuadrados</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>hess_rss <span class="ot">&lt;-</span> <span class="cf">function</span>(theta) {</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>((x<span class="sc">^</span><span class="dv">2</span>) <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">2</span> <span class="sc">*</span> theta <span class="sc">*</span> x) <span class="sc">-</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> y <span class="sc">*</span> <span class="fu">exp</span>(theta <span class="sc">*</span> x))</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Gauss-Newton</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>gauss_newton <span class="ot">&lt;-</span> <span class="cf">function</span>(theta0, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  traza <span class="ot">&lt;-</span> theta</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta <span class="sc">*</span> x)</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> y <span class="sc">-</span> f</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">&lt;-</span> <span class="sc">-</span>x <span class="sc">*</span> f</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>    H_approx <span class="ot">&lt;-</span> <span class="fu">sum</span>(J<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">sum</span>(J <span class="sc">*</span> r)</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> g <span class="sc">/</span> H_approx</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    theta <span class="ot">&lt;-</span> theta <span class="sc">+</span> delta</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>    traza <span class="ot">&lt;-</span> <span class="fu">c</span>(traza, theta)</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(delta) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  traza</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Newton-Raphson</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>newton_raphson <span class="ot">&lt;-</span> <span class="cf">function</span>(theta0, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>  traza <span class="ot">&lt;-</span> theta</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">grad_rss</span>(theta)</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>    H <span class="ot">&lt;-</span> <span class="fu">hess_rss</span>(theta)</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> <span class="sc">-</span>g <span class="sc">/</span> H</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>    theta <span class="ot">&lt;-</span> theta <span class="sc">+</span> delta</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>    traza <span class="ot">&lt;-</span> <span class="fu">c</span>(traza, theta)</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(delta) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>  traza</span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Levenberg-Marquardt</span></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>marquardt <span class="ot">&lt;-</span> <span class="cf">function</span>(theta0, <span class="at">lambda =</span> <span class="fl">0.01</span>, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a>  traza <span class="ot">&lt;-</span> theta</span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">grad_rss</span>(theta)</span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a>    H <span class="ot">&lt;-</span> <span class="fu">hess_rss</span>(theta)</span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a>    H_lm <span class="ot">&lt;-</span> H <span class="sc">+</span> lambda <span class="sc">*</span> <span class="fu">abs</span>(H) <span class="co"># Damping</span></span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> <span class="sc">-</span>g <span class="sc">/</span> H_lm</span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a>    theta_new <span class="ot">&lt;-</span> theta <span class="sc">+</span> delta</span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">rss</span>(theta_new) <span class="sc">&lt;</span> <span class="fu">rss</span>(theta)) {</span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a>      theta <span class="ot">&lt;-</span> theta_new</span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a>      lambda <span class="ot">&lt;-</span> lambda <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a>      lambda <span class="ot">&lt;-</span> lambda <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a>    traza <span class="ot">&lt;-</span> <span class="fu">c</span>(traza, theta)</span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(delta) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a>  traza</span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Descenso del gradiente</span></span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>steepest_descent <span class="ot">&lt;-</span> <span class="cf">function</span>(theta0, <span class="at">alpha =</span> <span class="fl">0.02</span>, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>  traza <span class="ot">&lt;-</span> theta</span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>    grad <span class="ot">&lt;-</span> <span class="fu">grad_rss</span>(theta)</span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>    theta_new <span class="ot">&lt;-</span> theta <span class="sc">-</span> alpha <span class="sc">*</span> grad</span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a>    traza <span class="ot">&lt;-</span> <span class="fu">c</span>(traza, theta_new)</span>
+<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(theta_new <span class="sc">-</span> theta) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>    theta <span class="ot">&lt;-</span> theta_new</span>
+<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>  traza</span>
+<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Incrementos fracionarios</span></span>
+<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a>fractional_increments <span class="ot">&lt;-</span> <span class="cf">function</span>(theta0, <span class="at">alpha =</span> <span class="fl">0.01</span>, <span class="at">delta =</span> <span class="fl">1e-4</span>, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
+<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>  traza <span class="ot">&lt;-</span> theta</span>
+<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a>    f0 <span class="ot">&lt;-</span> <span class="fu">rss</span>(theta)</span>
+<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a>    f1 <span class="ot">&lt;-</span> <span class="fu">rss</span>(theta <span class="sc">+</span> delta)</span>
+<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a>    slope <span class="ot">&lt;-</span> (f1 <span class="sc">-</span> f0) <span class="sc">/</span> delta</span>
+<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a>    theta_new <span class="ot">&lt;-</span> theta <span class="sc">-</span> alpha <span class="sc">*</span> slope</span>
+<span id="cb19-102"><a href="#cb19-102" aria-hidden="true" tabindex="-1"></a>    traza <span class="ot">&lt;-</span> <span class="fu">c</span>(traza, theta_new)</span>
+<span id="cb19-103"><a href="#cb19-103" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(theta_new <span class="sc">-</span> theta) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb19-104"><a href="#cb19-104" aria-hidden="true" tabindex="-1"></a>    theta <span class="ot">&lt;-</span> theta_new</span>
+<span id="cb19-105"><a href="#cb19-105" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-106"><a href="#cb19-106" aria-hidden="true" tabindex="-1"></a>  traza</span>
+<span id="cb19-107"><a href="#cb19-107" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-108"><a href="#cb19-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-109"><a href="#cb19-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Valor inicial</span></span>
+<span id="cb19-110"><a href="#cb19-110" aria-hidden="true" tabindex="-1"></a>theta0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span></span>
+<span id="cb19-111"><a href="#cb19-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-112"><a href="#cb19-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Correr todos los métodos</span></span>
+<span id="cb19-113"><a href="#cb19-113" aria-hidden="true" tabindex="-1"></a>trazas <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb19-114"><a href="#cb19-114" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Gauss-Newton"</span> <span class="ot">=</span> <span class="fu">gauss_newton</span>(theta0),</span>
+<span id="cb19-115"><a href="#cb19-115" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Newton-Raphson"</span> <span class="ot">=</span> <span class="fu">newton_raphson</span>(theta0),</span>
+<span id="cb19-116"><a href="#cb19-116" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Levenberg-Marquardt"</span> <span class="ot">=</span> <span class="fu">marquardt</span>(theta0),</span>
+<span id="cb19-117"><a href="#cb19-117" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Descenso del Gradiente"</span> <span class="ot">=</span> <span class="fu">steepest_descent</span>(theta0),</span>
+<span id="cb19-118"><a href="#cb19-118" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Incrementos Fractionarios"</span> <span class="ot">=</span> <span class="fu">fractional_increments</span>(theta0)</span>
+<span id="cb19-119"><a href="#cb19-119" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-120"><a href="#cb19-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-121"><a href="#cb19-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfica</span></span>
+<span id="cb19-122"><a href="#cb19-122" aria-hidden="true" tabindex="-1"></a>colores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span>, <span class="st">"purple"</span>, <span class="st">"orange"</span>, <span class="st">"black"</span>)</span>
+<span id="cb19-123"><a href="#cb19-123" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>,</span>
+<span id="cb19-124"><a href="#cb19-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb19-125"><a href="#cb19-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Iteración"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(theta),</span>
+<span id="cb19-126"><a href="#cb19-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Convergencia de los Métodos de Optimización"</span></span>
+<span id="cb19-127"><a href="#cb19-127" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-128"><a href="#cb19-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-129"><a href="#cb19-129" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">names</span>(trazas), <span class="st">"Verdadero Parámetro"</span>), <span class="at">col =</span> colores, <span class="at">lty =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="dv">2</span>), <span class="at">bty =</span> <span class="st">"n"</span>)</span>
+<span id="cb19-130"><a href="#cb19-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-131"><a href="#cb19-131" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(trazas)) {</span>
+<span id="cb19-132"><a href="#cb19-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(trazas[[i]]) <span class="sc">-</span> <span class="dv">1</span>), trazas[[i]], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colores[i])</span>
+<span id="cb19-133"><a href="#cb19-133" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-134"><a href="#cb19-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-135"><a href="#cb19-135" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> true_theta, <span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-Definiciones_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="valores-iniciales" class="level3" data-number="2.3.6">
+<h3 data-number="2.3.6" class="anchored" data-anchor-id="valores-iniciales"><span class="header-section-number">2.3.6</span> Valores iniciales</h3>
+<p>Ajustar un modelo de regresión no lineal requiere valores iniciales <span class="math inline">\(\boldsymbol{\theta}_0\)</span> para los parámetros del modelo. Buenos valores iniciales, es decir, valores de <span class="math inline">\(\boldsymbol{\theta}_0\)</span> cercanos a los valores verdaderos de los parámetros, minimizarán las dificultades de convergencia. Las modificaciones al procedimiento de linealización como el método de Marquardt han hecho que el procedimiento sea menos sensible a la elección de valores iniciales, pero siempre es una buena idea seleccionar <span class="math inline">\(\boldsymbol{\theta}_0\)</span> cuidadosamente. Una mala elección podría causar convergencia a un mínimo local en la función, y podríamos estar completamente inconscientes de que se ha obtenido una solución subóptima.</p>
+<p>En los modelos de regresión no lineal, los parámetros a menudo tienen algún significado físico, y esto puede ser muy útil para obtener valores iniciales. También puede ser útil graficar la función expectativa para varios valores de los parámetros para familiarizarse con el comportamiento del modelo y cómo los cambios en los valores de los parámetros afectan este comportamiento.</p>
+<p>Por ejemplo, en la función de Michaelis-Menten utilizada para los datos de puromicina (<a href="#exm-Michaelis-Menten" class="quarto-xref">Ejemplo&nbsp;<span>2.1</span></a>), el parámetro <span class="math inline">\(\theta_1\)</span> es la velocidad asintótica de la reacción, es decir, el valor máximo de <span class="math inline">\(f\)</span> cuando <span class="math inline">\(x \to \infty\)</span>. De manera similar, <span class="math inline">\(\theta_2\)</span> representa la concentración media, o el valor de <span class="math inline">\(x\)</span> tal que cuando la concentración alcanza ese valor, la velocidad es la mitad del valor máximo. Al obervar las gráficas de los datos, se podrían sugerir como valores iniciales razonables <span class="math inline">\(\theta_1 = 205\)</span> y <span class="math inline">\(\theta_2 = 0.08\)</span>, que fueron los utilizados anteriormente.</p>
+<p>En algunos casos podemos transformar la función expectativa para obtener valores iniciales. Por ejemplo, el modelo de Michaelis-Menten puede “linealizarse” tomando el recíproco de la función expectativa. Se pueden usar mínimos cuadrados lineales en los datos recíprocos, lo que resulta en estimaciones de los parámetros lineales. Estas estimaciones pueden usarse luego para obtener los valores iniciales necesarios <span class="math inline">\(\boldsymbol{\theta}_0\)</span>. La transformación gráfica también puede ser muy efectiva.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../Caps/01-Introduccion.html" class="pagination-link" aria-label="Regresión no lineal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión no lineal</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../Caps/03-Inferencia.html" class="pagination-link" aria-label="Inferencia estadística en regresión no lineal">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
