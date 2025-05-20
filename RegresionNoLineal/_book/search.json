@@ -20,46 +20,6 @@
     ]
   },
   {
-    "objectID": "Caps/01-Introduccion.html#motivación",
-    "href": "Caps/01-Introduccion.html#motivación",
-    "title": "2  Introducción",
-    "section": "",
-    "text": "Los lugares donde se puede encontrar agua en un país.\nLa popularidad de cierto artista en distintos lugares del mundo.\nPlayas susceptibles a tener problemas por huracanes.\nLa distribución de distintos recursos naturales (como recursos mineros).\nLa calidad de vida de la población en determinado territorio.",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introducción</span>"
-    ]
-  },
-  {
-    "objectID": "Caps/01-Introduccion.html#antecedentes-históricos",
-    "href": "Caps/01-Introduccion.html#antecedentes-históricos",
-    "title": "1  Introducción",
-    "section": "1.2 Antecedentes históricos",
-    "text": "1.2 Antecedentes históricos\nProbando.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Regresión no lineal</span>"
-    ]
-  },
-  {
-    "objectID": "Caps/02-Definiciones.html",
-    "href": "Caps/02-Definiciones.html",
-    "title": "2  Métodos de estimación",
-    "section": "",
-    "text": "2.1 Transformación a modelos lineales\nSe han proporcionado varios ejemplos en los que una relación de tendencia no lineal entre \\(y\\) y \\(x\\) puede transformarse para obtener una relación lineal. Debido a la relativa simplicidad de los métodos de regresión lineal, trabajar con el modelo linealizado es muy atractivo.\nA veces es útil considerar una transformación que induzca linealidad en la función de expectativa del modelo. Por ejemplo, consideremos el modelo \\[\n    y = f(x, \\boldsymbol\\theta) + \\varepsilon = \\theta_1 e^{\\theta_2 x} + \\varepsilon\n\\qquad(2.1)\\] La Ecuación 1.3 de crecimiento poblacional en el Ejemplo 1.1 es un ejemplo de este modelo. Dado que \\(\\mathbb{E}(y) = f(x, \\theta) = \\theta_1 e^{\\theta_2 x}\\), podemos linealizar la función de expectativa tomando logaritmos, \\[\n\\ln \\mathbb{E}(y) = \\ln \\theta_1 + \\theta_2 x.\n\\] Por lo tanto, es tentador considerar reescribir el modelo como \\[\n    \\ln y = \\ln \\theta_1 + \\theta_2 x + \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon\n\\qquad(2.2)\\] y usar regresión lineal simple para estimar \\(\\beta_0\\) y \\(\\beta_1\\). Sin embargo, las estimaciones por mínimos cuadrados lineales de los parámetros en la Ecuación 2.2 generalmente no serán equivalentes a las estimaciones no lineales de los parámetros en el modelo original Ecuación 2.1. La razón es que en el modelo no lineal original, los mínimos cuadrados implican la minimización de la suma de residuos al cuadrado en \\(y\\), mientras que en el modelo transformado de la Ecuación 2.2 estamos minimizando la suma de residuos al cuadrado en \\(\\ln y\\).\nAdemás, notemos que en la Ecuación 2.1 la estructura del error es aditiva, por lo que tomar logaritmos no puede producir el modelo en la Ecuación 2.2. Si la estructura del error es multiplicativa, por ejemplo \\[\ny = \\theta_1 e^{\\theta_2 x} \\varepsilon\n\\] entonces tomar logaritmos será apropiado, ya que \\[\n\\ln y = \\ln \\theta_1 + \\theta_2 x + \\ln \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon^*\n\\] y si \\(\\varepsilon^*\\) sigue una distribución normal, todas las propiedades estándar del modelo de regresión lineal y la inferencia asociada serán aplicables.\nEl problema a menudo gira en torno a la estructura del error, es decir, ¿se aplican los supuestos estándar sobre los errores al modelo no lineal original o al linealizado? Esta no siempre es una pregunta fácil de responder.",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Métodos de estimación</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "Referencias",
-    "section": "",
-    "text": "Ref 1\nRef 2",
-    "crumbs": [
-      "Referencias"
-    ]
-  },
-  {
     "objectID": "Caps/01-Introduccion.html#modelos-no-lineales-comunes",
     "href": "Caps/01-Introduccion.html#modelos-no-lineales-comunes",
     "title": "1  Regresión no lineal",
@@ -77,6 +37,16 @@
     "text": "1.3 El modelo de regresión no lineal\nEn general, escribiremos el modelo de regresión no lineal como \\[\n    y = f\\left(\\boldsymbol{x}, \\boldsymbol{\\theta}\\right) + \\varepsilon\n\\] donde \\(\\boldsymbol{\\theta} = (\\theta_1, \\ldots, \\theta_p)^\\top\\) es un vector de tamaño \\(p \\times 1\\) de parámetros desconocidos y \\(\\varepsilon\\) es un término de error aleatorio no correlacionado con \\(\\mathbb{E}(\\varepsilon) = 0\\) y \\(\\text{Var}(\\varepsilon) = \\sigma^{2}\\). También suponemos típicamente que los errores están distribuidos normales, como en la regresión lineal. Dado que \\[\\begin{align*}\n    \\mathbb E\\left({y}\\right) &= \\mathbb E\\left[f\\left(\\boldsymbol{x}, \\boldsymbol{\\theta}\\right) + \\varepsilon\\right]\\\\\n&= f\\left(\\boldsymbol{x}, \\boldsymbol{\\theta}\\right)\n\\end{align*}\\] llamamos a \\(f(\\boldsymbol{x}, \\boldsymbol{\\theta})\\) la o () para el modelo de regresión no lineal. Esto es muy similar al caso de regresión lineal, excepto que ahora la función de respuesta esperada es una de los parámetros.\nEn regresión lineal, las derivadas de la función de respuesta esperada no son funciones de los parámetros desconocidos. En un modelo de regresión no lineal, al menos una de las derivadas de la función de respuesta esperada con respecto a los parámetros depende de al menos uno de los parámetros. Para enfatizar la diferencia entre el modelo de regresión lineal y el modelo de regresión no lineal, denotaremos a los parámetros del modelo por \\(\\boldsymbol{\\beta} = (\\beta_1, \\ldots, \\beta_p)^\\top\\) para el primero, mientras que para el segundo utilizaremos \\(\\boldsymbol{\\theta} = (\\theta_1, \\ldots, \\theta_p)^\\top\\). Ilustremos esto con un ejemplo, consideremos un modelo de regresión lineal: \\[\n    \\boldsymbol y = f\\left(\\boldsymbol{x},\\boldsymbol{\\beta}\\right) + \\boldsymbol \\varepsilon = \\beta_{0} + \\sum_{j=1}^{k}\\beta_{j}x_{j} + \\boldsymbol \\varepsilon.\n\\] Ahora, \\[\n\\frac{\\partial f\\left(\\boldsymbol{x},\\boldsymbol{\\beta}\\right)}{\\partial\\beta_{j}} = x_{j}, \\quad j=0,1, \\ldots, k,\n\\] donde \\(\\boldsymbol x_{0} \\equiv 1\\). Nótese que en el caso lineal las derivadas son constantes con respecto a \\(\\boldsymbol{\\beta}\\).\nPor otro lado, consideremos el modelo no lineal \\[\ny = f\\left(x,\\boldsymbol{\\theta}\\right) + \\varepsilon = \\theta_{1}e^{\\theta_{2}x} + \\varepsilon.\n\\] Las derivadas de la función expectativa con respecto a \\(\\theta_{1}\\) y \\(\\theta_{2}\\) son: \\[\n\\frac{\\partial f\\left(x,\\boldsymbol{\\theta}\\right)}{\\partial\\theta_{1}} = e^{\\theta_{2}x} \\quad \\text{y} \\quad \\frac{\\partial f\\left(x,\\boldsymbol{\\theta}\\right)}{\\partial\\theta_{2}} = \\theta_{1}xe^{\\theta_{2}x}.\n\\] Dado que las derivadas son función de los parámetros desconocidos \\(\\theta_{1}\\) y \\(\\theta_{2}\\), el modelo es no lineal.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Regresión no lineal</span>"
+    ]
+  },
+  {
+    "objectID": "Caps/02-Definiciones.html",
+    "href": "Caps/02-Definiciones.html",
+    "title": "2  Métodos de estimación",
+    "section": "",
+    "text": "2.1 Transformación a modelos lineales\nSe han proporcionado varios ejemplos en los que una relación de tendencia no lineal entre \\(y\\) y \\(x\\) puede transformarse para obtener una relación lineal. Debido a la relativa simplicidad de los métodos de regresión lineal, trabajar con el modelo linealizado es muy atractivo.\nA veces es útil considerar una transformación que induzca linealidad en la función de expectativa del modelo. Por ejemplo, consideremos el modelo \\[\n    y = f(x, \\boldsymbol\\theta) + \\varepsilon = \\theta_1 e^{\\theta_2 x} + \\varepsilon\n\\qquad(2.1)\\] La Ecuación 1.3 de crecimiento poblacional en el Ejemplo 1.1 es un ejemplo de este modelo. Dado que \\(\\mathbb{E}(y) = f(x, \\theta) = \\theta_1 e^{\\theta_2 x}\\), podemos linealizar la función de expectativa tomando logaritmos, \\[\n\\ln \\mathbb{E}(y) = \\ln \\theta_1 + \\theta_2 x.\n\\] Por lo tanto, es tentador considerar reescribir el modelo como \\[\n    \\ln y = \\ln \\theta_1 + \\theta_2 x + \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon\n\\qquad(2.2)\\] y usar regresión lineal simple para estimar \\(\\beta_0\\) y \\(\\beta_1\\). Sin embargo, las estimaciones por mínimos cuadrados lineales de los parámetros en la Ecuación 2.2 generalmente no serán equivalentes a las estimaciones no lineales de los parámetros en el modelo original Ecuación 2.1. La razón es que en el modelo no lineal original, los mínimos cuadrados implican la minimización de la suma de residuos al cuadrado en \\(y\\), mientras que en el modelo transformado de la Ecuación 2.2 estamos minimizando la suma de residuos al cuadrado en \\(\\ln y\\).\nAdemás, notemos que en la Ecuación 2.1 la estructura del error es aditiva, por lo que tomar logaritmos no puede producir el modelo en la Ecuación 2.2. Si la estructura del error es multiplicativa, por ejemplo \\[\ny = \\theta_1 e^{\\theta_2 x} \\varepsilon\n\\] entonces tomar logaritmos será apropiado, ya que \\[\n\\ln y = \\ln \\theta_1 + \\theta_2 x + \\ln \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon^*\n\\] y si \\(\\varepsilon^*\\) sigue una distribución normal, todas las propiedades estándar del modelo de regresión lineal y la inferencia asociada serán aplicables.\nEl problema a menudo gira en torno a la estructura del error, es decir, ¿se aplican los supuestos estándar sobre los errores al modelo no lineal original o al linealizado? Esta no siempre es una pregunta fácil de responder.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Métodos de estimación</span>"
     ]
   },
   {
@@ -170,13 +140,13 @@
     ]
   },
   {
-    "objectID": "Caps/04-Validacion.html#medidas-de-no-linealidad",
-    "href": "Caps/04-Validacion.html#medidas-de-no-linealidad",
-    "title": "4  Validación del modelo",
-    "section": "4.3 Medidas de no linealidad",
-    "text": "4.3 Medidas de no linealidad\n{ }",
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "Referencias",
+    "section": "",
+    "text": "Ref 1\nRef 2",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Validación del modelo</span>"
+      "Referencias"
     ]
   }
 ]
