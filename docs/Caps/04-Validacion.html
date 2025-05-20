@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -184,7 +204,7 @@ window.Quarto = {
   <ul>
   <li><a href="#medidas-de-ajuste" id="toc-medidas-de-ajuste" class="nav-link active" data-scroll-target="#medidas-de-ajuste"><span class="header-section-number">4.1</span> Medidas de ajuste</a>
   <ul class="collapse">
-  <li><a href="#análisis-de-residuos" id="toc-análisis-de-residuos" class="nav-link" data-scroll-target="#análisis-de-residuos"><span class="header-section-number">4.1.1</span> Análisis de residuos</a></li>
+  <li><a href="#análisis-de-residuos-y-observaciones-influyentes" id="toc-análisis-de-residuos-y-observaciones-influyentes" class="nav-link" data-scroll-target="#análisis-de-residuos-y-observaciones-influyentes"><span class="header-section-number">4.1.1</span> Análisis de residuos y observaciones influyentes</a></li>
   <li><a href="#pseudo-r2" id="toc-pseudo-r2" class="nav-link" data-scroll-target="#pseudo-r2"><span class="header-section-number">4.1.2</span> Pseudo-<span class="math inline">\(R^2\)</span></a></li>
   </ul></li>
   <li><a href="#comparación-de-modelos" id="toc-comparación-de-modelos" class="nav-link" data-scroll-target="#comparación-de-modelos"><span class="header-section-number">4.2</span> Comparación de modelos</a>
@@ -219,18 +239,39 @@ window.Quarto = {
 
 <section id="medidas-de-ajuste" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="medidas-de-ajuste"><span class="header-section-number">4.1</span> Medidas de ajuste</h2>
-<section id="análisis-de-residuos" class="level3" data-number="4.1.1">
-<h3 data-number="4.1.1" class="anchored" data-anchor-id="análisis-de-residuos"><span class="header-section-number">4.1.1</span> Análisis de residuos</h3>
-<p>En el caso de regresión no lineal, tenemos las mismas hipótesis sobre los residuos que en el caso de regresión lineal. Así que, al igual que antes, podemos hacer un análisis de residuos completamente análogo al caso de regresión lineal. Para ello, se pueden considerar las 6 gráficas que consideramos antes:</p>
+<section id="análisis-de-residuos-y-observaciones-influyentes" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="análisis-de-residuos-y-observaciones-influyentes"><span class="header-section-number">4.1.1</span> Análisis de residuos y observaciones influyentes</h3>
+<p>En el caso de regresión no lineal, tenemos las mismas hipótesis sobre los residuos que en el caso de regresión lineal. Así que, al igual que antes, podemos hacer un análisis de residuos análogo al caso de regresión lineal. Para ello, definimos los residuales como <span class="math display">\[
+    \hat{e}_i = y_i - f(\boldsymbol{x_i}, \hat{\boldsymbol{\theta}}), \qquad i = 1, \ldots, n.
+\]</span> De esta manera, se pueden considerar las siguientes gráficas como antes:</p>
 <ol type="1">
-<li>gráfico de residuos contra valores ajustados,</li>
-<li>gráfico de escala-ubicación de contra valores ajustados,</li>
-<li>gráfico Q-Q normal,</li>
-<li>gráfico de residuos contra las palancas,</li>
-<li>gráfico de distancias de Cook contra las etiquetas de las filas, y</li>
-<li>gráfico de distancias de Cook contra leverage/(1-leverage).</li>
+<li>gráfico de residuos contra valores ajustados (gráfica de los pares <span class="math inline">\((f(\boldsymbol{x_i}, \hat{\boldsymbol{\theta}}), \hat{e}_i)\)</span>),</li>
+<li>gráfico de escala-ubicación de <span class="math inline">\(\sqrt{\left|\hat{e}_i\right|}\)</span> contra valores ajustados.</li>
 </ol>
-<p>La desventaja, es que</p>
+<p>Alternativamente podemos considerar los errores normalizados <span class="math display">\[
+    \hat{r}_i = \frac{\hat{e_i}}{\sqrt{\hat{s}^2}}.
+\]</span> Si las hipótesis del modelo son satisfechas, los residuos normalizados deberían estar distribuidos aproximadamente como una normal estándar. Para valorar esto, podemos considerar</p>
+<ol start="3" type="1">
+<li>gráfico Q-Q normal,</li>
+<li>prueba de normalidad como la de Anderson-Darling o de Shapiro-Wilk.</li>
+</ol>
+<p>Para verificar la independencia entre los errores, podemos considerar</p>
+<ol start="5" type="1">
+<li>gráfico de retraso de los residuos contra los residuos anteriores,</li>
+</ol>
+<p>donde si se observa alguna relación lineal entre los puntos, podría indicar dependencia entre los errores.</p>
+<p>Finalmente, para verificar si existen observaciones influyentes, se puede definir la distancia de Cook generalizada dada por <span class="math display">\[
+    GD_i = \ell_{(i)}(\hat{\boldsymbol{\theta}})^\top \mathbf{J}(\hat{\boldsymbol{\theta}})^{-1} \ell_{(i)}(\hat{\boldsymbol{\theta}}),
+\]</span> donde</p>
+<ul>
+<li><span class="math inline">\(\ell_{(i)}(\hat{\boldsymbol{\theta}}) = -\partial \ell_i(\boldsymbol{\theta}) / \partial \boldsymbol{\theta} \big|_{\hat{\boldsymbol{\theta}}}\)</span> es el gradiente de la log-verosimilitud sin la observación <span class="math inline">\(i\)</span>, evaluado en <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>;</li>
+<li><span class="math inline">\(\mathbf{J}(\hat{\boldsymbol{\theta}})\)</span> es la matriz de información observada de Fisher, que cuantifica la curvatura del modelo en <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>;</li>
+</ul>
+<p>y podemos considerar la gráfica</p>
+<ol start="6" type="1">
+<li>gráfico de distancias de Cook contra las etiquetas de las filas.</li>
+</ol>
+<p>Como podemos observar, el tipo de gráficos que se utilizan son similares a los utilizados en regresión lineal. Sin embargo, dado que los modelos no lineales pierden ciertas propiedades deseables, debemos ajustar ciertas definiciones.</p>
 </section>
 <section id="pseudo-r2" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="pseudo-r2"><span class="header-section-number">4.1.2</span> Pseudo-<span class="math inline">\(R^2\)</span></h3>
@@ -326,6 +367,29 @@ Tabla&nbsp;4.1: Análisis de suma de cuadrados adicional para modelos anidados.
 <p>Si el investigador no puede proporcionar razones convincentes para elegir un modelo sobre otros, entonces se pueden utilizar análisis estadísticos, siendo probablemente el más importante un análisis de los residuos. Generalmente, se debe elegir el modelo con el cuadrado medio residual más pequeño y los residuos de apariencia más aleatoria. Los residuos deben graficarse contra los valores predichos, las variables de control, el orden temporal y cualquier otra variable.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-douglass88" class="csl-entry" role="listitem">
+Bates, Douglas M., y Donald G. Watts. 1988. <em>Nonlinear regression analysis and its applications</em>. Wiley series en probability y mathematical statistics. Applied probability y statistics. New York: Wiley.
+</div>
+<div id="ref-Garay03082014" class="csl-entry" role="listitem">
+Garay, Aldo M., Víctor H. Lachos, Filidor V. Labra, y Edwin M. M. Ortega and. 2014. <span>«Statistical diagnostics for nonlinear regression models based on scale mixtures of skew-normal distributions»</span>. <em>Journal of Statistical Computation and Simulation</em> 84 (8): 1761-78. <a href="https://doi.org/10.1080/00949655.2013.766188">https://doi.org/10.1080/00949655.2013.766188</a>.
+</div>
+<div id="ref-montgomery92" class="csl-entry" role="listitem">
+Montgomery, Douglas C., Elizabeth A. Peck, y G. Geoffrey Vining. 2012. <em>Introduction to linear regression analysis</em>. 5.ª ed. Wiley series en probability y mathematical statistics. Applied probability y statistics. New York: Wiley.
+</div>
+<div id="ref-Ritz2008" class="csl-entry" role="listitem">
+Ritz, Christian, y Jens C. Streibig. 2008. <em>Nonlinear Regression with <span>R</span></em>. Use <span>R!</span> New York: Springer. <a href="https://doi.org/10.1007/978-0-387-09616-2">https://doi.org/10.1007/978-0-387-09616-2</a>.
+</div>
+<div id="ref-ruckstuhl10" class="csl-entry" role="listitem">
+Ruckstuhl, Andreas. 2010. <span>«Introduction to Nonlinear Regression»</span>. IDP Institut für Datenanalyse und Prozessdesign, ZHAW Zürcher Hochschule für Angewandte Wissenschaften.
+</div>
+<div id="ref-Schabenberger2002" class="csl-entry" role="listitem">
+Schabenberger, Oliver, y Francis J. Pierce. 2002. <em>Contemporary Statistical Models for the Plant and Soil Sciences</em>. Taylor &amp; Francis, CRC Press.
+</div>
+<div id="ref-seber03" class="csl-entry" role="listitem">
+Seber, G. A. F, y Wild C. J. 2003. <em>Nonlinear regression</em>. Wiley series en probability y mathematical statistics. Applied probability y statistics. New York: John Wiley &amp; Sons.
+</div>
+</div>
 </section>
 </section>
 
