@@ -321,7 +321,7 @@ El algoritmo Gauss-Newton converge en $\hat{\boldsymbol{\theta}}^\top = [212.7,\
 $$
 \hat{y} = \frac{\hat{\theta}_1 x}{x + \hat{\theta}_2} = \frac{212.7 x}{x + 0.0641}
 $$
-Estos cálculos pueden realizarse automáticamente con la función {{nls()}} de *R, como sigue.
+Estos cálculos pueden realizarse automáticamente con la función nls() de R, como sigue.
 
 
 ```{r}
@@ -479,7 +479,7 @@ H_S(\boldsymbol{\theta}) = 2 J_f(\boldsymbol{\theta})^\top J_f(\boldsymbol{\thet
 $$
 donde:
 
-* $J_f(\boldsymbol{\theta})$ es el **jacobiano de $\boldsymbol{f}$ respecto a $\boldsymbol{\theta}$, y
+* $J_f(\boldsymbol{\theta})$ es el **jacobiano** de $\boldsymbol{f}$ respecto a $\boldsymbol{\theta}$, y
 * $H_{f_i}(\boldsymbol{\theta})$ es el **hessiano** de la componente $f_i$ respecto a $\boldsymbol{\theta}$.
 
 En la práctica, frecuentemente se descarta el segundo término del Hessiano (que involucra las segundas derivadas de $\boldsymbol{f}$), obteniendo así el método de **Gauss-Newton** como una aproximación al método de Newton-Raphson. Esta omisión se justifica porque $J_f^\top J_f$ es simétrica y semidefinida positiva, lo que garantiza que la dirección de búsqueda sea de descenso, mientras que el término que involucra los Hessianos de $f_i$ puede introducir inestabilidades.
@@ -487,7 +487,7 @@ En la práctica, frecuentemente se descarta el segundo término del Hessiano (qu
 
 **Método del Descenso por Gradiente**
 
-El método del descenso por gradiente intenta encontrar el mínimo global de la función de suma de cuadrados residuales mediante minimización directa. El objetivo es moverse desde un punto inicial $\boldsymbol{\theta}_0$ en una dirección vectorial con componentes dadas por las derivadas de la función de suma de cuadrados residuales con respecto a los elementos de $\boldsymbol{\theta}$, es decir, en dirección $\nabla S(\boldsymbol \theta)$. Usualmente estas derivadas se estiman ajustando una aproximación de primer orden o planar alrededor del punto $\boldsymbol{\theta}_0$. Los coeficientes de regresión en el modelo de primer orden se toman como aproximaciones a las primeras derivadas.
+El método del descenso por gradiente intenta encontrar el mínimo global de la función de suma de cuadrados residuales mediante minimización directa. El objetivo es moverse desde un punto inicial $\boldsymbol{\theta}_0$ en una dirección vectorial con componentes dadas por las derivadas de la función de suma de cuadrados residuales con respecto a los elementos de $\boldsymbol{\theta}$, es decir, en dirección $-\nabla S(\boldsymbol \theta)$. Usualmente estas derivadas se estiman ajustando una aproximación de primer orden o planar alrededor del punto $\boldsymbol{\theta}_0$. Los coeficientes de regresión en el modelo de primer orden se toman como aproximaciones a las primeras derivadas.
 
 La principal desventaja de este método para resolver el problema de regresión no lineal es que puede converger muy lentamente. El descenso por gradiente generalmente funciona mejor cuando el punto inicial está muy alejado del óptimo. Sin embargo, a medida que la solución actual se acerca al óptimo, el procedimiento producirá movimientos cada vez más cortos y un comportamiento "en zig-zag". Este es el problema de convergencia mencionado anteriormente.
 
