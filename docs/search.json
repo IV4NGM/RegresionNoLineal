@@ -20,49 +20,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "objectID": "Caps/01-Introduccion.html#motivación",
-    "href": "Caps/01-Introduccion.html#motivación",
-    "title": "2  Introducción",
-    "section": "",
-    "text": "Los lugares donde se puede encontrar agua en un país.\nLa popularidad de cierto artista en distintos lugares del mundo.\nPlayas susceptibles a tener problemas por huracanes.\nLa distribución de distintos recursos naturales (como recursos mineros).\nLa calidad de vida de la población en determinado territorio.",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introducción</span>"
-    ]
-  },
-  {
-    "objectID": "Caps/01-Introduccion.html#antecedentes-históricos",
-    "href": "Caps/01-Introduccion.html#antecedentes-históricos",
-    "title": "1  Introducción",
-    "section": "1.2 Antecedentes históricos",
-    "text": "1.2 Antecedentes históricos\nProbando.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Regresión no lineal</span>"
-    ]
-  },
-  {
-    "objectID": "Caps/02-Definiciones.html",
-    "href": "Caps/02-Definiciones.html",
-    "title": "2  Métodos de estimación",
-    "section": "",
-    "text": "2.1 Transformación a modelos lineales\nSe han proporcionado varios ejemplos en los que una relación de tendencia no lineal entre \\(y\\) y \\(x\\) puede transformarse para obtener una relación lineal. Debido a la relativa simplicidad de los métodos de regresión lineal, trabajar con el modelo linealizado es muy atractivo.\nA veces es útil considerar una transformación que induzca linealidad en la función de expectativa del modelo. Por ejemplo, consideremos el modelo \\[\n    y = f(x, \\boldsymbol\\theta) + \\varepsilon = \\theta_1 e^{\\theta_2 x} + \\varepsilon\n\\qquad(2.1)\\] La Ecuación 1.3 de crecimiento poblacional en el Ejemplo 1.1 es un ejemplo de este modelo. Dado que \\(\\mathbb{E}(y) = f(x, \\theta) = \\theta_1 e^{\\theta_2 x}\\), podemos linealizar la función de expectativa tomando logaritmos, \\[\n\\ln \\mathbb{E}(y) = \\ln \\theta_1 + \\theta_2 x.\n\\] Por lo tanto, es tentador considerar reescribir el modelo como \\[\n    \\ln y = \\ln \\theta_1 + \\theta_2 x + \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon\n\\qquad(2.2)\\] y usar regresión lineal simple para estimar \\(\\beta_0\\) y \\(\\beta_1\\). Sin embargo, las estimaciones por mínimos cuadrados lineales de los parámetros en la Ecuación 2.2 generalmente no serán equivalentes a las estimaciones no lineales de los parámetros en el modelo original Ecuación 2.1. La razón es que en el modelo no lineal original, los mínimos cuadrados implican la minimización de la suma de residuos al cuadrado en \\(y\\), mientras que en el modelo transformado de la Ecuación 2.2 estamos minimizando la suma de residuos al cuadrado en \\(\\ln y\\).\nAdemás, notemos que en la Ecuación 2.1 la estructura del error es aditiva, por lo que tomar logaritmos no puede producir el modelo en la Ecuación 2.2. Si la estructura del error es multiplicativa, por ejemplo \\[\ny = \\theta_1 e^{\\theta_2 x} \\varepsilon\n\\] entonces tomar logaritmos será apropiado, ya que \\[\n\\ln y = \\ln \\theta_1 + \\theta_2 x + \\ln \\varepsilon = \\beta_0 + \\beta_1 x + \\varepsilon^*\n\\] y si \\(\\varepsilon^*\\) sigue una distribución normal, todas las propiedades estándar del modelo de regresión lineal y la inferencia asociada serán aplicables.\nEl problema a menudo gira en torno a la estructura del error, es decir, ¿se aplican los supuestos estándar sobre los errores al modelo no lineal original o al linealizado? Esta no siempre es una pregunta fácil de responder.",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Métodos de estimación</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "Referencias",
-    "section": "",
-    "text": "Bates, Douglas M., and Donald G. Watts. 1988. Nonlinear Regression\nAnalysis and Its Applications. Wiley Series in Probability and\nMathematical Statistics. Applied Probability and Statistics. New York:\nWiley.\n\n\nMontgomery, Douglas C., Elizabeth A. Peck, and G. Geoffrey Vining. 2012.\nIntroduction to Linear Regression Analysis. 5th ed. Wiley\nSeries in Probability and Mathematical Statistics. Applied Probability\nand Statistics. New York: Wiley.\n\n\nRuckstuhl, Andreas. 2010. “Introduction to Nonlinear\nRegression.” IDP Institut für Datenanalyse und Prozessdesign,\nZHAW Zürcher Hochschule für Angewandte Wissenschaften.\n\n\nSchabenberger, Oliver, and Francis J. Pierce. 2002. Contemporary\nStatistical Models for the Plant and Soil Sciences. Taylor &\nFrancis, CRC Press.\n\n\nSeber, G. A. F, and Wild C. J. 2003. Nonlinear Regression.\nWiley Series in Probability and Mathematical Statistics. Applied\nProbability and Statistics. New York: John Wiley & Sons.",
-    "crumbs": [
-      "Referencias"
-    ]
-  },
-  {
-=======
->>>>>>> 767507a07ecb13068fc488be1b0d4e41674745e0
     "objectID": "Caps/01-Introduccion.html#modelos-no-lineales-comunes",
     "href": "Caps/01-Introduccion.html#modelos-no-lineales-comunes",
     "title": "1  Regresión no lineal",

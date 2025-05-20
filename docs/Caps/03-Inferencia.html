@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Referencias – Regresión No Lineal</title>
+<title>3&nbsp; Inferencia estadística en regresión no lineal – Regresión No Lineal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,51 +20,28 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./Caps/04-Validacion.html" rel="prev">
-<<<<<<< HEAD
-<script src="site_libs/quarto-html/quarto.js"></script>
-=======
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
->>>>>>> 767507a07ecb13068fc488be1b0d4e41674745e0
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../Caps/04-Validacion.html" rel="next">
+<link href="../Caps/02-Definiciones.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -93,6 +70,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -105,7 +111,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">Referencias</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Caps/03-Inferencia.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -120,7 +126,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Regresión No Lineal</a> 
+      <a href="../">Regresión No Lineal</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -132,37 +138,37 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Caps/01-Introduccion.html" class="sidebar-item-text sidebar-link">
+  <a href="../Caps/01-Introduccion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión no lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Caps/02-Definiciones.html" class="sidebar-item-text sidebar-link">
+  <a href="../Caps/02-Definiciones.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Caps/03-Inferencia.html" class="sidebar-item-text sidebar-link">
+  <a href="../Caps/03-Inferencia.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Caps/04-Validacion.html" class="sidebar-item-text sidebar-link">
+  <a href="../Caps/04-Validacion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Referencias</span></a>
   </div>
 </li>
@@ -171,15 +177,22 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#intervalos-y-regiones-de-confianza" id="toc-intervalos-y-regiones-de-confianza" class="nav-link active" data-scroll-target="#intervalos-y-regiones-de-confianza"><span class="header-section-number">3.1</span> Intervalos y Regiones de confianza</a></li>
+  <li><a href="#validez-de-la-inferencia-aproximada" id="toc-validez-de-la-inferencia-aproximada" class="nav-link" data-scroll-target="#validez-de-la-inferencia-aproximada"><span class="header-section-number">3.2</span> Validez de la inferencia aproximada</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Referencias</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inferencia estadística en regresión no lineal</span></h1>
 </div>
 
 
@@ -196,37 +209,58 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-douglass88" class="csl-entry" role="listitem">
-Bates, Douglas M., and Donald G. Watts. 1988. <em>Nonlinear Regression
-Analysis and Its Applications</em>. Wiley Series in Probability and
-Mathematical Statistics. Applied Probability and Statistics. New York:
-Wiley.
+<p>En un <strong>modelo de regresión lineal</strong>, cuando los errores están distribuidos de forma normal e independiente, existen pruebas estadísticas exactas e intervalos de confianza basados en las distribuciones <span class="math inline">\(t\)</span> y <span class="math inline">\(F\)</span>, y las estimaciones de los parámetros tienen propiedades estadísticas útiles y atractivas. Sin embargo, este no es el caso en la regresión no lineal, incluso cuando los errores están distribuidos normalmente e independientemente.</p>
+<p>Es decir, en la regresión no lineal, las estimaciones por mínimos cuadrados (o máxima verosimilitud) de los parámetros del modelo no poseen las propiedades atractivas que tienen sus contrapartes en la regresión lineal, como insesgamiento, varianza mínima o distribuciones muestrales normales. La inferencia estadística en regresión no lineal depende de resultados <strong>asintóticos</strong>. La teoría de muestras grandes generalmente se aplica tanto para errores distribuidos normalmente como no normales.</p>
+<p>Los resultados asintóticos clave pueden resumirse brevemente de la siguiente manera. En general, cuando el tamaño de la muestra <span class="math inline">\(n\)</span> es grande, el valor esperado de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente igual a <span class="math inline">\(\boldsymbol{\theta}\)</span>, el verdadero vector de estimaciones de parámetros, y la matriz de covarianza de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente <span class="math inline">\(\sigma^2(\hat{X}^\top \hat{X})^{-1}\)</span>, donde <span class="math inline">\(\hat{X}\)</span> es la matriz de derivadas parciales evaluadas en la estimación de mínimos cuadrados de la última iteración <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span>. Además, la distribución muestral de <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span> es aproximadamente normal.</p>
+<p>En consecuencia, la inferencia estadística para regresión no lineal cuando el tamaño de muestra es grande se realiza exactamente igual que para regresión lineal. Las pruebas estadísticas e intervalos de confianza son solo procedimientos aproximados.</p>
+<section id="intervalos-y-regiones-de-confianza" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="intervalos-y-regiones-de-confianza"><span class="header-section-number">3.1</span> Intervalos y Regiones de confianza</h2>
+<p>Anteriormente comentamos que siguiendo las ideas de regresión lineal, podemos obtener aproximaciones para las regiones de confianza y los intervalos de confianza en el caso de regresión no lineal, cuando el tamaño de la muestra es grande. De esta manera, tenemos que los intervalos de confianza para <span class="math inline">\(\boldsymbol\theta\)</span> están dados por <span class="math display">\[
+    \widehat{\theta}_j \pm t(\alpha / 2; n-p) \sqrt{ MS_{\operatorname{Res}} C_{j j}}.
+\]</span> donde <span class="math inline">\(\hat{X}\)</span> es la matriz de derivadas parciales definida previamente, evaluada en la última iteración del estimador de mínimos cuadrados <span class="math inline">\(\boldsymbol{\hat{\theta}}\)</span>, <span class="math inline">\(C_{jj}\)</span> es la <span class="math inline">\(j\)</span>-ésima entrada en la diagonal de la matriz <span class="math inline">\(C = (\hat{X}^\top\hat{X})^{-1}\)</span>, <span class="math display">\[
+    \text{ECM} = \frac{S(\hat{\boldsymbol\theta})}{n-p}
+\]</span> es el error cuadrado medio, y <span class="math inline">\(t(n-p)\)</span> es la distribución t de Student de <span class="math inline">\(n-p\)</span> grados de libertad.</p>
+<p>De igual manera, las regiones de inferencia aproximada para un modelo no lineal se definen como <span id="eq-reg-con-non-lineal-model"><span class="math display">\[
+    (\theta - \hat{\theta})^{\top} \hat X^{\top} \hat X (\theta - \hat{\theta}) \leq p \text{ECM} F(p, n - p; \alpha)
+\qquad(3.1)\]</span></span> en donde <span class="math inline">\(F(p, n - p; \alpha)\)</span> es el cuantil superior <span class="math inline">\(\alpha\)</span> para la distribución F de Fisher con $p $ y <span class="math inline">\(n - p\)</span> grados de libertad.</p>
+<div id="exm-inter-conf" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 3.1</strong></span> Reconsideremos el modelo de Michaelis-Menten para los datos de puromicina analizados previamente. Para probar la significancia de la regresión (es decir, <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{1}=\theta_{2}=0\)</span>) podríamos usar un procedimiento similar a un ANOVA. Podemos calcular la suma total de cuadrados de las <span class="math inline">\(y\)</span> como <span class="math inline">\(SS_{T}=271\ 909.0\)</span>. Entonces, la suma de cuadrados del modelo o regresión es: <span class="math display">\[
+SS_{\text{modelo}} = SS_{T} - SS_{\text{Res}} = 271\ 410 - 1\ 195.4 = 270\ 214.6.
+\]</span> Por lo tanto, la prueba de significancia de la regresión es: <span class="math display">\[
+F_{0} = \frac{SS_{\text{modelo}}/2}{MS_{\text{Res}}} = \frac{270\ 214.6/2}{1\ 195.4/(12-2)} = 1\ 130.22,
+\]</span> y calculamos un valor <span class="math inline">\(P\)</span> aproximado a partir de la distribución <span class="math inline">\(F_{2,10}\)</span>. Este valor <span class="math inline">\(P\)</span> es considerablemente menor que <span class="math inline">\(0.0001\)</span>, por lo que podemos rechazar con seguridad la hipótesis nula y concluir que al menos uno de los parámetros del modelo es distinto de cero.</p>
+<p>Para probar hipótesis sobre los parámetros individuales del modelo, <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{1}=0\)</span> y <span class="math inline">\(H_{0}\)</span>: <span class="math inline">\(\theta_{2}=0\)</span>, podríamos calcular estadísticos <span class="math inline">\(t\)</span> aproximados como: <span class="math display">\[
+t_{1} = \frac{\hat{\theta}_{1}}{\text{se}\left(\hat{\theta}_{1}\right)} = \frac{212.7}{6.9471} = 30.62
+\]</span> y <span class="math display">\[
+t_{2} = \frac{\hat{\theta}_{2}}{\text{se}\left(\hat{\theta}_{2}\right)} = \frac{0.0641}{0.00828} = 7.74.
+\]</span> Los valores <span class="math inline">\(P\)</span> aproximados para estos dos estadísticos de prueba son ambos menores que <span class="math inline">\(0.01\)</span>. Por lo tanto, podríamos concluir que ambos parámetros son distintos de cero con una confianza del <span class="math inline">\(99\%\)</span>.</p>
+<p>Los intervalos de confianza aproximados del <span class="math inline">\(95\%\)</span> de confianza para <span class="math inline">\(\theta_{1}\)</span> se encuentran de la siguiente manera: <span class="math display">\[
+\begin{array}{rcl}
+    \hat{\theta}_{1} - t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right) &amp;\leq \theta_{1} &amp;\leq \hat{\theta}_{1} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{1}\right)\\
+    212.7 - 2.228\,(6.9471) &amp;\leq \theta_{1} &amp;\leq 212.7 + 2.228\,(6.9471)\\
+    197.2 &amp;\leq \theta_{1} &amp;\leq 228.2.
+\end{array}
+\]</span> Análogamente, para <span class="math inline">\(\theta_2\)</span>: <span class="math display">\[
+\begin{array}{rcl}
+    t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right) &amp;\leq \theta_{2} &amp;\leq \hat{\theta}_{2} + t_{0.025,10}\,\text{se}\left(\hat{\theta}_{2}\right)\\
+    0.0641 - 2.228\,(0.00828) &amp;\leq \theta_{2} &amp;\leq 0.0641 + 2.228\,(0.00828)\\
+    0.0457 &amp;\leq \theta_{2} &amp;\leq 0.0825.
+\end{array}
+\]</span> En lo anterior también se puede ver que ninguno de los intervalos contiene al <span class="math inline">\(0\)</span>, lo que nos permite asegurar que ambos parámetros son distintos de cero con una confianza del <span class="math inline">\(95\%\)</span>.</p>
 </div>
-<div id="ref-montgomery92" class="csl-entry" role="listitem">
-Montgomery, Douglas C., Elizabeth A. Peck, and G. Geoffrey Vining. 2012.
-<em>Introduction to Linear Regression Analysis</em>. 5th ed. Wiley
-Series in Probability and Mathematical Statistics. Applied Probability
-and Statistics. New York: Wiley.
-</div>
-<div id="ref-ruckstuhl10" class="csl-entry" role="listitem">
-Ruckstuhl, Andreas. 2010. <span>“Introduction to Nonlinear
-Regression.”</span> IDP Institut für Datenanalyse und Prozessdesign,
-ZHAW Zürcher Hochschule für Angewandte Wissenschaften.
-</div>
-<div id="ref-Schabenberger2002" class="csl-entry" role="listitem">
-Schabenberger, Oliver, and Francis J. Pierce. 2002. <em>Contemporary
-Statistical Models for the Plant and Soil Sciences</em>. Taylor &amp;
-Francis, CRC Press.
-</div>
-<div id="ref-seber03" class="csl-entry" role="listitem">
-Seber, G. A. F, and Wild C. J. 2003. <em>Nonlinear Regression</em>.
-Wiley Series in Probability and Mathematical Statistics. Applied
-Probability and Statistics. New York: John Wiley &amp; Sons.
-</div>
-</div>
+</section>
+<section id="validez-de-la-inferencia-aproximada" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="validez-de-la-inferencia-aproximada"><span class="header-section-number">3.2</span> Validez de la inferencia aproximada</h2>
+<p>Dado que las pruebas, procedimientos e intervalos de confianza en regresión no lineal se basan en teoría de grandes muestras y típicamente el tamaño de muestra en un problema de regresión no lineal puede no ser tan grande, es lógico cuestionar la validez de estos procedimientos. Sería deseable tener una guía o “regla general” que nos indique cuándo el tamaño de muestra es lo suficientemente grande para que los resultados asintóticos sean válidos. Desafortunadamente, no existe tal guía general. Sin embargo, existen algunos <strong>indicadores</strong> que sugieren que los resultados pueden ser válidos en una aplicación particular.</p>
+<ol type="1">
+<li><p>Si el algoritmo de estimación de regresión no lineal converge en pocas iteraciones, esto indica que la aproximación lineal utilizada para resolver el problema fue muy satisfactoria, y es probable que los resultados asintóticos se apliquen adecuadamente. Una convergencia que requiere muchas iteraciones es un síntoma de que los resultados asintóticos podrían no aplicarse, y deberían considerarse otras verificaciones de adecuación.</p></li>
+<li><p>Se han desarrollado varias medidas de curvatura y no linealidad del modelo. Estas medidas describen cuantitativamente la adecuación de la aproximación lineal. Nuevamente, una aproximación lineal inadecuada indicaría que los resultados de inferencia asintótica son cuestionables.</p></li>
+<li><p>Se puede usar <strong>bootstrap</strong> para estudiar la distribución muestral de los estimadores, calcular errores estándar aproximados y encontrar intervalos de confianza aproximados. Podríamos calcular estimaciones bootstrap de estas cantidades y compararlas con los errores estándar e intervalos de confianza aproximados producidos por los resultados asintóticos. Una buena concordancia con las estimaciones bootstrap es un indicio de que los resultados de inferencia de grandes muestras son válidos.</p></li>
+</ol>
+<p>Cuando hay indicios de que los resultados de inferencia asintótica no son válidos, tenemos pocas opciones a realizar. Una posibilidad es considerar una forma alternativa del modelo, si existe, o quizás un modelo de regresión no lineal diferente. A veces, gráficos de los datos y gráficos de diferentes funciones de respuesta esperada (<span class="math inline">\(f\)</span>) de modelos no lineales pueden ser útiles en este sentido. Alternativamente, se pueden usar los resultados de inferencia de remuestreo o bootstrap. Sin embargo, si el modelo es incorrecto o está mal especificado, hay pocas razones para creer que los resultados de remuestreo serán más válidos que los resultados de inferencia de grandes muestras.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -630,11 +664,14 @@ Probability and Statistics. New York: John Wiley &amp; Sons.
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Caps/04-Validacion.html" class="pagination-link" aria-label="Validación del modelo">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span>
+      <a href="../Caps/02-Definiciones.html" class="pagination-link" aria-label="Métodos de estimación">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de estimación</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../Caps/04-Validacion.html" class="pagination-link" aria-label="Validación del modelo">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Validación del modelo</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
