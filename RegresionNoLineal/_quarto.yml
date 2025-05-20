@@ -8,7 +8,7 @@ book:
   chapters:
     - index.qmd
     - Caps/01-Introduccion.qmd
-    - Caps/02-Definiciones.qmd
+    - Caps/02-Estimacion.qmd
     - Caps/03-Inferencia.qmd
     - Caps/04-Validacion.qmd
     - references.qmd

@@ -369,6 +369,9 @@ plot(theoretical_probs, empirical_probs,
   xlim = c(0, 1), ylim = c(0, 1)
 )
 abline(0, 1, col = "red") # Reference line (y = x)
+
+qqnorm(residuals, main = "QQ-Plot of Residuals")
+qqline(residuals, col = "red")
 ```
 
 
