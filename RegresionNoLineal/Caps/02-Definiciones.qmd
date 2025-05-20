@@ -392,7 +392,7 @@ $$
 en donde $p$ es el número de parámetros en el modelo de regresión no lineal.
 También podemos estimar la **matriz de covarianzas asintótica** (para muestras grandes) del vector de parámetros $\boldsymbol{\hat{\theta}}$ como
 $$
-    \operatorname{Var}(\boldsymbol{\hat{\theta}})=\sigma^2 {\left(\hat{X}^\top \hat{X}\right)}^{-1},
+    \operatorname{Var}(\boldsymbol{\hat{\theta}})=\hat\sigma^2 {\left(\hat{X}^\top \hat{X}\right)}^{-1},
 $$ {#eq-Var-asintotica}
 en donde $\hat{X}$ es la matriz de derivadas parciales definida previamente, evaluada en la última iteración del estimador de mínimos cuadrados $\boldsymbol{\hat{\theta}}$.
 

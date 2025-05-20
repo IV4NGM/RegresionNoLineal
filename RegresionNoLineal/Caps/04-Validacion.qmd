@@ -2,18 +2,46 @@
 
 ## Medidas de ajuste
 
-### Análisis de residuos
+### Análisis de residuos y observaciones influyentes
 
-En el caso de regresión no lineal, tenemos las mismas hipótesis sobre los residuos que en el caso de regresión lineal. Así que, al igual que antes, podemos hacer un análisis de residuos completamente análogo al caso de regresión lineal. Para ello, se pueden considerar las 6 gráficas que consideramos antes:
+En el caso de regresión no lineal, tenemos las mismas hipótesis sobre los residuos que en el caso de regresión lineal. Así que, al igual que antes, podemos hacer un análisis de residuos análogo al caso de regresión lineal. Para ello, definimos los residuales como
+$$
+    \hat{e}_i = y_i - f(\boldsymbol{x_i}, \hat{\boldsymbol{\theta}}), \qquad i = 1, \ldots, n.
+$$
+De esta manera, se pueden considerar las siguientes gráficas como antes:
 
-1. gráfico de residuos contra valores ajustados,
-2. gráfico de escala-ubicación de contra valores ajustados,
+1. gráfico de residuos contra valores ajustados (gráfica de los pares $(f(\boldsymbol{x_i}, \hat{\boldsymbol{\theta}}), \hat{e}_i)$),
+2. gráfico de escala-ubicación de $\sqrt{\left|\hat{e}_i\right|}$ contra valores ajustados.
+
+Alternativamente podemos considerar los errores normalizados
+$$
+    \hat{r}_i = \frac{\hat{e_i}}{\sqrt{\hat{s}^2}}.
+$$
+Si las hipótesis del modelo son satisfechas, los residuos normalizados deberían estar distribuidos aproximadamente como una normal estándar. Para valorar esto, podemos considerar
+
 3. gráfico Q-Q normal,
-4. gráfico de residuos contra las palancas,
-5. gráfico de distancias de Cook contra las etiquetas de las filas, y
-6. gráfico de distancias de Cook contra leverage/(1-leverage).
+4. prueba de normalidad como la de Anderson-Darling o de Shapiro-Wilk.
 
-La desventaja, es que
+Para verificar la independencia entre los errores, podemos considerar
+
+5. gráfico de retraso de los residuos contra los residuos anteriores,
+
+donde si se observa alguna relación lineal entre los puntos, podría indicar dependencia entre los errores.
+
+Finalmente, para verificar si existen observaciones influyentes, se puede definir la distancia de Cook generalizada dada por
+$$
+    GD_i = \ell_{(i)}(\hat{\boldsymbol{\theta}})^\top \mathbf{J}(\hat{\boldsymbol{\theta}})^{-1} \ell_{(i)}(\hat{\boldsymbol{\theta}}),
+$$
+donde
+
+* $\ell_{(i)}(\hat{\boldsymbol{\theta}}) = -\partial \ell_i(\boldsymbol{\theta}) / \partial \boldsymbol{\theta} \big|_{\hat{\boldsymbol{\theta}}}$ es el gradiente de la log-verosimilitud sin la observación $i$, evaluado en $\hat{\boldsymbol{\theta}}$;
+* $\mathbf{J}(\hat{\boldsymbol{\theta}})$ es la matriz de información observada de Fisher, que cuantifica la curvatura del modelo en $\hat{\boldsymbol{\theta}}$;
+
+y podemos considerar la gráfica
+
+6. gráfico de distancias de Cook contra las etiquetas de las filas.
+
+Como podemos observar, el tipo de gráficos que se utilizan son similares a los utilizados en regresión lineal. Sin embargo, dado que los modelos no lineales pierden ciertas propiedades deseables, debemos ajustar ciertas definiciones.
 
 ### Pseudo-$R^2$
 
